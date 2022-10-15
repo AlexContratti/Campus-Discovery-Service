@@ -1,9 +1,8 @@
 import React from "react"
-import './App.css';
 import {Link } from "react-router-dom";
 
 
-function Config() {
+function Login() {
     return (
         <div>
         <div>
@@ -14,24 +13,10 @@ function Config() {
         </div>
         <div className = "App">
             <header>
-                Initial Configuration Screen
+                Login
             </header>
             <br></br><br></br>
             <form>
-                <label>
-                    Name:
-                    <input type = "text" name = "name"></input>
-                </label>
-                <br></br>
-                <label>
-                    Who are you:
-                    <select>
-                        <option value = "Student">Student</option>
-                        <option value = "Teacher">Teacher</option>
-                        <option value = "Organizer">Organizer</option>
-                    </select>
-                </label>
-                <br></br><br></br>
                 <label>
                     Username:
                     <input type = "text" name = "username"></input>
@@ -52,4 +37,4 @@ function Config() {
     );
 }
 
-export default Config;
+export default Login;

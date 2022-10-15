@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 import React from "react"
-import Homepage from './Homepage.js';
-import Config from './Config.js';
-import Events from './Events.js';
-import Start from './Start.js';
-import Login from './Login.js';
+import Homepage from './pages/Homepage.js';
+import Config from './pages/Config.js';
+import Events from './pages/Events.js';
+import Start from './pages/Start.js';
+import Login from './pages/Login.js';
 
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 
