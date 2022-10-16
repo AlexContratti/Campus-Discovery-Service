@@ -6,14 +6,16 @@ import './Start.css';
 function Start() {
     return (
         <div className="start-container">
-            <div className="exit-button">
-                <Link to="/"><button> Exit the game </button></Link>
-            </div>
-            <div className="start-button">
-                <Link to="/login"><button> Login </button> </Link>
-            </div>
-            <div className="start-button"> 
-                <Link to="/config"><button> Make Account </button></Link>
+            <Link to="/">
+                <button className="exit-button"> Exit </button>
+            </Link>
+            <div className="login-buttons">
+                <Link to="/login">
+                    <button className="start-button"> Login </button> 
+                </Link>
+                <Link to="/config">
+                    <button className="start-button"> Make Account </button>
+                </Link>
             </div>
         </div>
     );

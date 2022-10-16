@@ -1,3 +1,10 @@
+body, #root, .container {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+/*
 .App {
   text-align: center;
 }
@@ -36,3 +43,4 @@
     transform: rotate(360deg);
   }
 }
+*/
