@@ -40,7 +40,7 @@
   
   .nav-bar-container .profile {
     width: 70%;
-    padding: 15%;
+    padding: 5%;
     border-radius: 25px;
     display: flex;
     justify-content: space-around;
@@ -48,7 +48,7 @@
     font-family: 'Noto Serif', serif;
     font-size: 30px;
     letter-spacing: -2.24px;
-    background-color: #152238;
+    background-color: #2f4366;
     color: #a57c01;
   }
   

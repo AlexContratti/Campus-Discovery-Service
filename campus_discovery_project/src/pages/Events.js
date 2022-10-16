@@ -9,9 +9,6 @@ function Events() {
         <div className="events-container">
             <div className="nav-bar"><Sidebar/></div>
             <div className = "events">
-                <div>
-                    <Link to="/"><button> Exit </button> </Link>
-                </div>
                 <div className="pageheader"> Events </div>
             </div>
         </div>
