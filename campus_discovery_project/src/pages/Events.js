@@ -1,21 +1,19 @@
 import React from "react"
 import {Link } from "react-router-dom";
+import Sidebar from '../components/Sidebar';
+import './Events.css';
 
 
 function Events() {
     return (
-        <div>
-        <div>
-            <Link to="/"><button>
-              Exit the game
-        </button>
-        </Link>
-        </div>
-        <div className = "App-header">
-            <header>
-                Events Page
-            </header>
-        </div>
+        <div className="events-container">
+            <div className="nav-bar"><Sidebar/></div>
+            <div className = "events">
+                <div>
+                    <Link to="/"><button> Exit </button> </Link>
+                </div>
+                <div className="pageheader"> Events </div>
+            </div>
         </div>
     );
 }

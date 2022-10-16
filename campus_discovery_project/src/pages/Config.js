@@ -6,7 +6,7 @@ function Config() {
     return (
         <div className="config-container">
             <div>
-                <Link to="/"><button> Exit the game </button> </Link>
+                <Link to="/"><button> Exit </button> </Link>
             </div>
             <div className = "App">
                 <header> Initial Configuration Screen </header>
