@@ -10,11 +10,13 @@ function Login() {
                 <Link to="/"> <button className="exit-button"> Exit </button> </Link>
             </div>
             <div className = "input-container">
-                <header> Login </header>
-                <label className="input"> Username:
+                <div className="header"> Login </div>
+                <div className="label"> Username: </div>
+                <label className="input">
                     <input type = "text" name = "username"></input>
                 </label>
-                <label className="input"> Password:
+                <div className="label"> Password: </div>
+                <label className="input">
                     <input type = "text" name = "password"></input>
                 </label>
                     
