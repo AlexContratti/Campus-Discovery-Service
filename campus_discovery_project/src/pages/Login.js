@@ -1,9 +1,14 @@
 import React from "react"
 import {Link } from "react-router-dom";
 import "./Login.css";
-
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+    const navigate = useNavigate()
+    const handleSubmitClick = () => {
+        navigate('/Events')
+    }
+    
     return (
         <div className="login-container">
             <div>
@@ -22,10 +27,7 @@ function Login() {
                     </label>
                 </form>
 
-                    <Link to="/Events"><button className="login-button">
-                        Submit
-                        </button>
-                    </Link>
+                <button className="login-button" onClick={handleSubmitClick}> Submit </button>
                 
             </div>
         </div>

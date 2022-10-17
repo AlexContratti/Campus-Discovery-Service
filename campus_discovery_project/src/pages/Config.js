@@ -1,9 +1,15 @@
 import React from "react"
 import {Link } from "react-router-dom";
 import './Config.css';
+import { useNavigate } from 'react-router-dom';
 
 
 function Config() {
+    const navigate = useNavigate()
+    const handleSubmitClick = () => {
+        navigate('/Events')
+    }
+
     return (
         <div className="config-container">
             <div>
@@ -38,7 +44,7 @@ function Config() {
                     </label>
                 </form>
                    
-                <Link to="/Events"><button className="submit"> Submit </button> </Link>
+                <button className="submit" onClick={handleSubmitClick}> Submit </button>
                 
             </div>
         </div>

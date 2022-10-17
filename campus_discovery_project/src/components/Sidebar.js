@@ -5,8 +5,7 @@ import EventIcon from '@mui/icons-material/Event';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom'
-import {Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 export default function Sidebar () {
   const navigate = useNavigate()
