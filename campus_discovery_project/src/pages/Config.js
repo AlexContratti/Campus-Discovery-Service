@@ -5,9 +5,16 @@ import { useNavigate } from 'react-router-dom';
 
 
 function Config() {
+    var name
+    var username
+    var password
     const navigate = useNavigate()
     const handleSubmitClick = () => {
-        navigate('/Events')
+        if (name.length === 0 || username.length === 0 || password.length === 0) {
+            navigate('/Config')
+        } else {
+            navigate('/Events')
+        }
     }
 
     return (
@@ -21,7 +28,7 @@ function Config() {
 
                     <div className="label"> Name: </div>
                     <label>
-                        <input type = "text" name = "name"></input>
+                        <input type = "text" name = "name" placeholder = "Enter Name" onChange={e => name = e.target.value}></input>
                     </label>
                     
                     <div className="label"> Who are you: </div>
@@ -35,12 +42,12 @@ function Config() {
                     
                     <div className="label"> Username: </div>
                     <label>
-                        <input type = "text" name = "username"></input>
+                        <input type = "text" name = "username" placeholder = "Enter Username" onChange={e => username = e.target.value}></input>
                     </label>
                    
                     <div className="label"> Password: </div>
                     <label>
-                        <input type = "text" name = "password"></input>
+                        <input type = "text" name = "password" placeholder = "Enter Password" onChange={e => password = e.target.value}></input>
                     </label>
                 </form>
                    

@@ -4,9 +4,15 @@ import "./Login.css";
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
+    var username
+    var password
     const navigate = useNavigate()
     const handleSubmitClick = () => {
-        navigate('/Events')
+        if (username.length === 0 || password.length === 0) {
+            navigate('/Login')
+        } else {
+            navigate('/Events')
+        }
     }
     
     return (
@@ -19,11 +25,11 @@ function Login() {
                 <form>
                     <div className="label"> Username: </div>
                     <label className="input">
-                        <input type = "text" name = "username"></input>
+                        <input type = "text" name = "username" placeholder = "Enter Username" onChange={e => username = e.target.value}></input>
                     </label>
                     <div className="label"> Password: </div>
                     <label className="input">
-                        <input type = "text" name = "password"></input>
+                        <input type = "text" name = "password" placeholder = "Enter Password" onChange={e => password = e.target.value}></input>
                     </label>
                 </form>
 
