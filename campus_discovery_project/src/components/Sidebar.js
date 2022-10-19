@@ -22,7 +22,7 @@ export default function Sidebar () {
           <li className="menu-item" onClick={handleExitClick}><LogoutIcon className="icon"/> Exit </li>
         </ul>
       </div>
-      <div className="profile"><AccountCircleIcon className="icon"/>User</div>
+      <div className="profile"><AccountCircleIcon className="icon"/>User Type</div>
     </div>
   )
 }
