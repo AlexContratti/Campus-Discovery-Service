@@ -1,0 +1,42 @@
+.add-event-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.add-event-container .input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.add-event-container .input .title {
+    padding: 8px;
+    font-size: 16px;
+}
+
+.add-event-container .input .input-text {
+    border: none;
+    border-bottom: 1px solid #152238;
+    font-size: 15px;
+    line-height: 23px;
+    font-weight: 500;
+    text-align: left;
+    background-color: #CFCECA;
+    color: #152238;
+}
+
+.events-container .save-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Noto Serif', serif;
+    font-size: 20px;
+    color: #a57c01;
+    padding: 8px;
+    text-align: center;
+    border-radius: 10px;
+    margin-top: 30px;
+    background-color: #152238;
+}
