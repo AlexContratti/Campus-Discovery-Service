@@ -23,3 +23,22 @@
     font-size: 36px;
     color: #152724;
 }
+
+.events-container .tool-bar {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-bottom: 10px;
+}
+
+.events-container .add-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Noto Serif', serif;
+    font-size: 20px;
+    color: #a57c01;
+    padding: 8px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #152238;
+}

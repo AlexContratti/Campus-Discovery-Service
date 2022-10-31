@@ -13,7 +13,6 @@
     font-family: 'Noto Serif', serif;
     font-size: 48px;
     line-height: 50px;
-    letter-spacing: -2.24px;
     color: #a57c01;
   }
   
@@ -28,7 +27,6 @@
     cursor: pointer;
     font-family: 'Noto Serif', serif;
     font-size: 30px;
-    letter-spacing: -2.24px;
     color: #a57c01;
   
   }
@@ -47,7 +45,6 @@
     align-items: center;
     font-family: 'Noto Serif', serif;
     font-size: 30px;
-    letter-spacing: -2.24px;
     background-color: #2f4366;
     color: #a57c01;
   }
