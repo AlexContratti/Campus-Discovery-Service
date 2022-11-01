@@ -5,23 +5,22 @@ import { useNavigate } from 'react-router-dom';
 
 
 function Config() {
-    var name
-    var username
-    var password
-    var type
+    var type;
     const navigate = useNavigate()
-    const handleSubmitClick = () => {
-        if (name.length === 0 || username.length === 0 || password.length === 0) {
+    const handleSubmitClick = (event) => {
+        if (document.getElementById("name").value.length === 0 || 
+            document.getElementById("username").value.length === 0 || 
+            document.getElementById("password").value.length === 0) {
             navigate('/Config')
         } else {
             const options = {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    nameBody: name,
-                    usernameBody: username,
-                    passwordBody: password,
-                    typeBody: type
+                    name: document.getElementById("name").value,
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value,
+                    type: type
                 })
             }
             fetch("/register", options)
@@ -41,12 +40,12 @@ function Config() {
 
                     <div className="label"> Name: </div>
                     <label>
-                        <input type = "text" name = "name" placeholder = "Enter Name" onChange={e => name = e.target.value}></input>
+                        <input type = "text" id = "name" name = "name" placeholder = "Enter Name"></input>
                     </label>
                     
                     <div className="label"> Who are you: </div>
                     <label>
-                        <select className="select" onchange={e => type = e.target.value}>
+                        <select className="select" onChange={e => type = e.target.value}>
                             <option value = "Student">Student</option>
                             <option value = "Teacher">Teacher</option>
                             <option value = "Organizer">Organizer</option>
@@ -55,16 +54,16 @@ function Config() {
                     
                     <div className="label"> Username: </div>
                     <label>
-                        <input type = "text" name = "username" placeholder = "Enter Username" onChange={e => username = e.target.value}></input>
+                        <input type = "text" name = "username" placeholder = "Enter Username" id = "username"></input>
                     </label>
                    
                     <div className="label"> Password: </div>
                     <label>
-                        <input type = "text" name = "password" placeholder = "Enter Password" onChange={e => password = e.target.value}></input>
+                        <input type = "text" name = "password" placeholder = "Enter Password" id = "password"></input>
                     </label>
                 </form>
                    
-                <button type = 'button' className="submit" onClick={handleSubmitClick}> Submit </button>
+                <button type = "submit" className="submit" onClick={handleSubmitClick}> Submit </button>
                 
             </div>
         </div>

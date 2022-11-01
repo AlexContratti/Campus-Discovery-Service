@@ -4,19 +4,17 @@ import "./Login.css";
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
-    var username
-    var password
     const navigate = useNavigate()
-    const handleSubmitClick = () => {
-        if (username.length === 0 || password.length === 0) {
+    const handleSubmitClick = (event) => {
+        if (document.getElementById("username").value.length === 0 ||  document.getElementById("password").value.length === 0) {
             navigate('/Login')
         } else {
             const options = {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    usernameBody: username,
-                    passwordBody: password,
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value,
                 })
             }
             fetch("/login", options)
@@ -35,15 +33,15 @@ function Login() {
                 <form>
                     <div className="label"> Username: </div>
                     <label className="input">
-                        <input type = "text" name = "username" placeholder = "Enter Username" onChange={e => username = e.target.value}></input>
+                        <input type = "text" id = "username" name = "username" placeholder = "Enter Username"></input>
                     </label>
                     <div className="label"> Password: </div>
                     <label className="input">
-                        <input type = "text" name = "password" placeholder = "Enter Password" onChange={e => password = e.target.value}></input>
+                        <input type = "text" id = "password" name = "password" placeholder = "Enter Password"></input>
                     </label>
                 </form>
 
-                <button type = "button" className="login-button" onClick={handleSubmitClick}> Submit </button>
+                <button type = "submit" className="login-button" onClick={handleSubmitClick}> Submit </button>
                 
             </div>
         </div>
