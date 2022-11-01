@@ -19,7 +19,7 @@ export default function AddEvent ({addEvent}) {
                 <input type='text' className='input-text'></input>
             </div>
             <div className='input'>
-                <div className='title'>Time:</div>
+                <div className='title'>Date/Time:</div>
                 <input type='text' className='input-text'></input>
             </div>
             <div className='input'>
