@@ -27,12 +27,14 @@ class Database {
         const result = await this.client.db("campus_discovery").collection("events").insertOne(newEvent);
 
         console.log(`New event created with the following id: ${result.insertedId}`);
+        return result;
     }
 
     async createUser(newUser) {
         const result = await this.client.db("campus_discovery").collection("users").insertOne(newUser);
 
         console.log(`New user created with the following id: ${result.insertedId}`);
+        return result;
     }
 
     async getLogin({
@@ -55,6 +57,17 @@ class Database {
         }
     }
 
+    async getAllEvents() {
+        const results = await this.client.db("campus_discovery").collection("events").find({})
+
+        if (results.toArray().length > 0) {
+            console.log("events found");
+            return results;
+        } else {
+            console.log("no events found");
+            return results;
+        }
+    }
     async getEvents(eventName) {
         const cursor = this.client.db("campus_discovery").collection("events").find(
             {name: eventName})
@@ -67,6 +80,12 @@ class Database {
         } else {
             console.log(`no events found with name ${eventName}`);
         }
+    }
+
+    async getUser(username) {
+        const result = await this.client.db("campus_discovery").collection("users").findOne({"username": username},
+        {projection: {type: 1}})
+        return result
     }
 
     async getUserInfo({
@@ -82,8 +101,10 @@ class Database {
         if (result) {
             console.log(`Found a user's info in the collection with the username ${username} or password ${password}:`);
             console.log(result);
+            return result;
         } else {
             console.log(`No user's info found with the username ${username} or password ${password}`);
+            return result;
         }
     }
 
@@ -92,6 +113,14 @@ class Database {
                 .deleteOne({ name: eventName });
 
         console.log(`${result.deletedCount} document(s) was/were deleted.`);
+        return result;
+    }
+
+    async updateEvent(eventName, updates) {
+        const result = await this.client.db("campus_discovery").collection("events").updateOne(
+            {"name": eventName}, {$set: updates}
+        )
+        return result;
     }
 }
 
