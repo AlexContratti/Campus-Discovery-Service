@@ -20,6 +20,8 @@ function Login() {
             fetch("/login", options)
                 .then(response => response.json())
             navigate('/Events')
+
+            localStorage.setItem("currUser",  document.getElementById("username").value);
         }
     }
     
