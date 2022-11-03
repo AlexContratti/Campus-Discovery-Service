@@ -2,6 +2,7 @@ import React from "react"
 import {Link } from "react-router-dom";
 import "./Login.css";
 import { useNavigate } from 'react-router-dom';
+import {setUserName} from "../components/GlobalUser"
 
 function Login() {
     const navigate = useNavigate()
@@ -21,7 +22,7 @@ function Login() {
                 .then(response => response.json())
             navigate('/Events')
 
-            localStorage.setItem("currUser",  document.getElementById("username").value);
+            setUserName(document.getElementById("username").value)
         }
     }
     

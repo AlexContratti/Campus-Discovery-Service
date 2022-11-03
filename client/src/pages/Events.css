@@ -46,8 +46,26 @@
 .grid-container {
     display: grid;
     row-gap: 50px;
-    col-gap: 50px;
+    column-gap: 15px;
     grid-template-columns: repeat(auto-fit, 200px)
+}
+
+.grid-container .tile {
+    padding: 8px;
+    background-color: #152238;
+    color: #a57c01;
+    border-radius: 5px;
+}
+
+.grid-container .tile .card {
+    justify-content: center;
+    align-items: center;
+    font-family: serif;
+}
+
+.des-modal-content {
+    color: #152238;
+    background-color: #CFCECA;
 }
 
 .modal {
@@ -69,4 +87,4 @@
     padding: 20px;
     border: 1px solid #888;
     width: 80%
-}
+} 

@@ -81,6 +81,7 @@ class Database {
         } else {
             console.log(`no events found with name ${eventName}`);
         }
+        return results
     }
 
     async getUser(username) {

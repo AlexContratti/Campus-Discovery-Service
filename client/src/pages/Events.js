@@ -6,23 +6,26 @@ import AddIcon from '@mui/icons-material/Add';
 import Modal from "../components/Modal";
 import AddEvent from "../components/AddEvent";
 import DeleteIcon from '@mui/icons-material/Delete';
+import {getInfo} from "../components/GlobalUser"
 
 function Events() {
     const [showModal, setShowModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDesModal, setShowDesModal] = useState(false);
     const [data, setData] = useState(null);
-    var modal = false;
+    var modal = null
     useEffect( () => {fetch("/events").then(res => res.json()).then(data => setData(data))}, []);
-    console.log(data)
 
     const handleAddEvent = async () => {
         setShowModal(false)
+        let userInfo = await getInfo()
         try{
             const add = await fetch("/createEvent", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     eventName: document.getElementById("eventName").value,
-                    host: document.getElementById("host").value,
+                    host: userInfo[1],
                     location: document.getElementById("location").value,
                     dateTime: document.getElementById("dateTime").value,
                     description: document.getElementById("description").value,
@@ -36,26 +39,25 @@ function Events() {
 
     const handleEventDelete = async (e) => {
         try{
-            const user = await fetch("/users", {
+            /* const user = await fetch("/users", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     username:"Host",
                 })
-            })
-
-            console.log(user)
-            const event = await fetch("/event", {
+            }) */
+            let event = ""
+            const ev = await fetch("/event", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     eventName: e.target.id,
                 })
-            })
-            console.log(event)
+            }).then(res => res.json()).then(data => event = data[0])
+            let userInfo = await getInfo()
 
-            if (user.type === "Organizer" || user.name === event.host) {
-                console.log("if")
+            console.log(userInfo[2], userInfo[1], event.host)
+            if (userInfo[2] === "Organizer" || userInfo[1] === event.host) {
                 const del = await fetch("/event", {
                     method: "DELETE",
                     headers: {'Content-Type': 'application/json'},
@@ -70,10 +72,11 @@ function Events() {
     }
 
     const handleEditEvent = async () => {
-        setShowModal(false);
+        setShowEditModal(false);
         try{
+            console.log("handler")
             const add = await fetch("/events", {
-                method: "PUT",
+                method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     eventName: document.getElementById("eventName").value, 
@@ -83,8 +86,8 @@ function Events() {
                     dateTime: document.getElementById("dateTime").value,
                     description: document.getElementById("description").value }
                 })
-            })
-        console.log(add)
+            }).then(res => res.json())
+            console.log("end")
         } catch(err){
             console.error()
         }
@@ -114,6 +117,8 @@ function Events() {
         console.log(event.target.id)
         modal = document.getElementById(event.target.id + "-modal")
         modal.style.display = "block"
+        document.getElementById(event.target.id+"-modal").show = true;
+        //setShowDesModal(true);
     }
 
     const close = (event) => {
@@ -137,34 +142,51 @@ function Events() {
                 <div className="grid-container">
                     { data === null ? "" : data.map(event => (
                         
-                            <section>
-                                <div className="card">
-                                    <h5>{event.name}</h5>
-                                    <p>{event.host}</p>
-                                    <p>{event.location}</p>
-                                    <p>{event.time}</p>
-                                    <p>{event.description}</p> 
-                                    <button type = "button" id = {event.name} onClick = {modalHandler}>Find Out More</button>{' '}
-                                    <button type = "button" id = {event.name} onClick = {handleEventDelete}>Delete</button>{' '}
-                                    <div type="button" className="edit-button" onClick={() => setShowModal(true)}> Edit Event </div>
-                                        <Modal title="Edit" show={showModal} setShow={setShowModal}>
-                                            <AddEvent addEvent={handleEditEvent}/>
-                                        </Modal>
+                        <section className='tile'>
+                            <div className="card">
+                                <h2>{event.name}</h2>
+                                <p>{event.time}</p>
+                                <p>{event.description}</p> 
+                                <button type = "button" id = {event.name} onClick = {modalHandler}>Find Out More</button>{' '}
+                                <button type = "button" id = {event.name} onClick = {handleEventDelete}>Delete</button>{' '}
+                                <div type="button" className="edit-button" onClick={() => setShowEditModal(true)}> Edit Event </div>
+                                <Modal title="Edit" show={showEditModal} setShow={setShowEditModal}>
+                                    <AddEvent addEvent={handleEditEvent}/>
+                                </Modal>
                                     {/*
                                     <div onClick={handleEventDelete}>
                                         <DeleteIcon type="button" pointerEvents="none"></DeleteIcon>
                                     </div>
                     */}
+                            </div>
+
+                            {/* <Modal id = {event.name+"-modal"} show={showDesModal} setShow={setShowDesModal}>
+                                <div className='des-modal-content'>
+                                    <h2>{event.name}</h2>
+                                    <p>Host: {event.host}</p>
+                                    <p>Location: {event.location}</p>
+                                    <p>Date&Time: {event.time}</p>
+                                    <p>Description: {event.description}</p> 
                                 </div>
-                                <div id={event.name+"-modal"} class="modal">
-                                    <div className="modal-content">
-                                        <span className="close" onClick={close}>
-                                            &times;
-                                        </span>
-                                        <Modal event = {event}/>
+                            </Modal> */}
+
+                            
+                            <div id={event.name+"-modal"} class="modal">
+                                <div className="modal-content">
+                                    <span className="close" onClick={close}>
+                                        &times;
+                                    </span>
+                                    <div className='des-modal-content'>
+                                        <h2>{event.name == null ? "No name" : event.name}</h2>
+                                        <p>Host: {event.host == null ? "No host" : event.host}</p>
+                                        <p>Location: {event.location == null ? "No location" : event.location}</p>
+                                        <p>Date&Time: {event.time == null ? "No time" : event.time}</p>
+                                        <p>Description: {event.description == null ? "No description" : event.description}</p> 
                                     </div>
                                 </div>
-                            </section>
+                            </div>
+                            
+                        </section>
                         
                     ))}
                 </div>

@@ -133,9 +133,9 @@ app.post("/users", jsonBodyParser, async (req, res) => {
   }
 })
 
-app.put("/events", jsonBodyParser, async (req, res) => {
+app.post("/events", jsonBodyParser, async (req, res) => {
   try {
-    console.log("/events PUT Request Received");
+    console.log("/events POST Request Received");
 
     var {eventName, updates } = req.body;
 

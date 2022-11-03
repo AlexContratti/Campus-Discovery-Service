@@ -10,10 +10,10 @@ export default function AddEvent ({addEvent}) {
                 <div className='title'>Event Name:</div>
                 <input type='text' id="eventName" className='input-text' autoFocus={true}></input>
             </div>
-            <div className='input'>
+{/*             <div className='input'>
                 <div className='title'>Host:</div>
                 <input type='text' id="host" className='input-text'></input>
-            </div>
+            </div> */}
             <div className='input'>
                 <div className='title'>Location:</div>
                 <input type='text' id="location" className='input-text'></input>
