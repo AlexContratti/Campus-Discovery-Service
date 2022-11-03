@@ -117,11 +117,11 @@ app.get("/users", async (req, res) => {
   try {
     console.log("/users GET Request Received");
 
-    var username = req.body;
+    var {username} = req.body;
 
     let type = await db.getUser(username);
 
-    return type;
+    res.status(200).send(type);
   } catch (err) {
     console.log(err);
     res.status(400);

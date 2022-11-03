@@ -83,8 +83,7 @@ class Database {
     }
 
     async getUser(username) {
-        const result = await this.client.db("campus_discovery").collection("users").findOne({"username": username},
-        {projection: {type: 1}})
+        const result = await this.client.db("campus_discovery").collection("users").findOne({username: username})
         return result
     }
 
