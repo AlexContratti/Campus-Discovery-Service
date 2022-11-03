@@ -58,9 +58,10 @@ class Database {
     }
 
     async getAllEvents() {
-        const results = await this.client.db("campus_discovery").collection("events").find({})
+        const results = await this.client.db("campus_discovery").collection("events").find().project({name:true, description:true,
+        host:true, location:true, time:true}).toArray();
 
-        if (results.toArray().length > 0) {
+        if (results.length > 0) {
             console.log("events found");
             return results;
         } else {
@@ -112,7 +113,7 @@ class Database {
                 .deleteOne({ name: eventName });
 
         console.log(`${result.deletedCount} document(s) was/were deleted.`);
-        return result;
+        return result.deletedCount;
     }
 
     async updateEvent(eventName, updates) {
@@ -121,6 +122,7 @@ class Database {
         )
         return result;
     }
+    
 }
 
 module.exports = { Database };

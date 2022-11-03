@@ -63,6 +63,7 @@ app.post("/createEvent", jsonBodyParser, async (req, res) => {
     var {eventName, host, location, dateTime, description} = req.body;
     if (!eventName || !host || !location || !description || !dateTime || dateTime.length < 16) {
       res.status(400).send("Invalid inputs");
+      return;
     }
 
     let validated = await db.createEvent({
@@ -78,6 +79,7 @@ app.post("/createEvent", jsonBodyParser, async (req, res) => {
     } else {
       res.status(400);
     }
+    res.send();
   } catch (err) {
     console.log(err);
     res.status(400);
@@ -88,7 +90,7 @@ app.get("/events", async(req, res) => {
   try {
     console.log("/events GET Request Received");
 
-    return await db.getAllEvents();
+    res.status(200).send(await db.getAllEvents());
   } catch (err) {
     console.log(err);
     res.status(400);
@@ -98,15 +100,16 @@ app.get("/events", async(req, res) => {
 app.delete("/event", jsonBodyParser, async(req, res) => {
   try {
     console.log("/event DELETE Request Received");
-    var eventName = req.body;
+    var {eventName} = req.body;
 
     let value = await db.deleteEvent(eventName);
 
-    if (value) {
+    if (value > 0) {
       res.status(200);
     } else {
-      res.status(400);
+      res.status(404);
     }
+    res.send()
   } catch (err) {
     console.log(err);
     res.status(400);
@@ -122,6 +125,21 @@ app.get("/users", async (req, res) => {
     let type = await db.getUser(username);
 
     res.status(200).send(type);
+  } catch (err) {
+    console.log(err);
+    res.status(400);
+  }
+})
+
+app.put("/events", jsonBodyParser, async (req, res) => {
+  try {
+    console.log("/events PUT Request Received");
+
+    var {eventName, updates } = req.body;
+
+    let changes = await db.updateEvent(eventName, updates);
+
+    res.status(200).send(changes)
   } catch (err) {
     console.log(err);
     res.status(400);
