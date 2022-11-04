@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import {Link } from "react-router-dom";
 import Sidebar from '../components/Sidebar';
 import './Events.css';
@@ -7,111 +7,117 @@ import Modal from "../components/Modal";
 import AddEvent from "../components/AddEvent";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {getInfo} from "../components/GlobalUser"
+import Pagination from "../components/Pagination"
+import EditIcon from '@mui/icons-material/Edit';
+import Edit from '@mui/icons-material/Edit';
 
 function Events() {
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDesModal, setShowDesModal] = useState(false);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);   
+    const eventtiles = useRef(null)
+
+    const [eventName, setEventName] = useState("")
+    const [location, setLocation] = useState("")
+    const [dateTime, setDateTime] = useState("")
+    const [desc, setDesc] = useState("")
+
+    const [currPage, setCurrPage] = useState(1);
+    const [postsPerPage] = useState(10);
+
+    const indexOfLastPost = Math.min(currPage * postsPerPage, data.length);
+    const indexOfFirstPost = Math.max(indexOfLastPost - postsPerPage, (currPage - 1) * postsPerPage);
+    const currEvents = data.slice(indexOfFirstPost, indexOfLastPost);
+
+
     var modal = null
-    useEffect( () => {fetch("/events").then(res => res.json()).then(data => setData(data))}, []);
+    useEffect( () => {
+        fetch("http://localhost:3001/events")
+            .then(res => res.json())
+            .then(data => setData(data));
+    }, []);
+
+    const paginate = (pageNumber) => {
+        setCurrPage(pageNumber)
+    };
+
+    const previousPage = () => {
+        if (currPage !== 1) setCurrPage(currPage - 1);
+    };
+
+    const nextPage = () => {
+        if (currPage != Math.ceil(data.length / postsPerPage)) setCurrPage(currPage + 1);
+    };
 
     const handleAddEvent = async () => {
         setShowModal(false)
         let userInfo = await getInfo()
-        try{
-            const add = await fetch("/createEvent", {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    eventName: document.getElementById("eventName").value,
-                    host: userInfo[1],
-                    location: document.getElementById("location").value,
-                    dateTime: document.getElementById("dateTime").value,
-                    description: document.getElementById("description").value,
-                })
+        const add = fetch("http://localhost:3001/createEvent", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                eventName: eventName,
+                host: userInfo[1],
+                location: location,
+                dateTime: dateTime,
+                description: desc,
             })
+        }).then(console.log).catch(console.error)
         console.log(add)
-        } catch(err){
-            console.error()
-        }
     }
 
     const handleEventDelete = async (e) => {
-        try{
-            /* const user = await fetch("/users", {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    username:"Host",
-                })
-            }) */
-            let event = ""
-            const ev = await fetch("/event", {
+        /* const user = await fetch("/users", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                username:"Host",
+            })
+        }) */
+        let event = ""
+        const ev = await fetch("http://localhost:3001/event", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                eventName: e.target.id,
+            })
+        }).then(res => res.json()).then(data => event = data[0])
+        let userInfo = await getInfo()
+
+        console.log(userInfo[2], userInfo[1], event.host)
+        if (userInfo[2] === "Organizer" || userInfo[1] === event.host) {
+            const del = fetch("http://localhost:3001/deleteEvent", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     eventName: e.target.id,
                 })
-            }).then(res => res.json()).then(data => event = data[0])
-            let userInfo = await getInfo()
-
-            console.log(userInfo[2], userInfo[1], event.host)
-            if (userInfo[2] === "Organizer" || userInfo[1] === event.host) {
-                const del = await fetch("/event", {
-                    method: "DELETE",
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        eventName: e.target.id,
-                    })
-                })
-            }
-        } catch(err){
-            console.error()
+            }).then(console.log).catch(console.error)
         }
     }
 
     const handleEditEvent = async () => {
-        setShowEditModal(false);
         try{
             console.log("handler")
-            const add = await fetch("/events", {
+            const edit = await fetch("http://localhost:3001/editEvent", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    eventName: document.getElementById("eventName").value, 
+                    eventName: eventName,
                     updates: {
-                    host: document.getElementById("host").value,
-                    location: document.getElementById("location").value,
-                    dateTime: document.getElementById("dateTime").value,
-                    description: document.getElementById("description").value }
+                        location: location,
+                        time: dateTime,
+                        description: desc
+                    }
                 })
-            }).then(res => res.json())
+            })
             console.log("end")
+            setShowEditModal(false);
         } catch(err){
             console.error()
         }
     }
-
-
-    const events = [
-        ["title1", "host1", "descipriton1", "location1", "date/time1"],
-        ["title2", "host1", "descipriton1", "location1", "date/time1"],
-        ["title3", "host1", "descipriton1", "location1", "date/time1"],
-        ["title4", "host1", "descipriton1", "location1", "date/time1"],
-        ["title5", "host1", "descipriton1", "location1", "date/time1"],
-        ["title6", "host1", "descipriton1", "location1", "date/time1"],
-        ["title7", "host1", "descipriton1", "location1", "date/time1"],
-        ["title8", "host1", "descipriton1", "location1", "date/time1"],
-        ["title9", "host1", "descipriton1", "location1", "date/time1"],
-        ["title10", "host1", "descipriton1", "location1", "date/time1"],
-        ["title11", "host1", "descipriton1", "location1", "date/time1"],
-        ["title12", "host1", "descipriton1", "location1", "date/time1"],
-        ["title13", "host1", "descipriton1", "location1", "date/time1"],
-        ["title14", "host1", "descipriton1", "location1", "date/time1"],
-        ["title15", "host1", "descipriton1", "location1", "date/time1"],
-        ["title16", "host1", "descipriton1", "location1", "date/time1"]
-    ]
 
     const modalHandler = (event) => {
         console.log(event.target.id)
@@ -125,7 +131,7 @@ function Events() {
         modal.style.display = "none"
     }
 
-
+    
     return (
         <div className="events-container">
             <div className="nav-bar"><Sidebar/></div>
@@ -134,30 +140,33 @@ function Events() {
                 <div className="tool-bar">
                     <div className="add-button" onClick={() => setShowModal(true)}> <AddIcon/> Add Event </div>
                     <Modal title="Add" show={showModal} setShow={setShowModal}>
-                        <AddEvent addEvent={handleAddEvent}/>
+                        <AddEvent  addEvent={handleAddEvent} eventName={eventName} setEventName={setEventName}
+                            location={location} setLocation={setLocation} dateTime={dateTime} setDateTime={setDateTime}
+                            desc={desc} setDesc={setDesc}/>
                     </Modal>
                     {/*<div className="delete-button" onClick={() => setShowModal(true)}>Delete</div>*/}
                 </div>
                 
                 <div className="grid-container">
-                    { data === null ? "" : data.map(event => (
+                    { currEvents === null ? "" : currEvents.map(event => (
                         
                         <section className='tile'>
                             <div className="card">
                                 <h2>{event.name}</h2>
                                 <p>{event.time}</p>
                                 <p>{event.description}</p> 
-                                <button type = "button" id = {event.name} onClick = {modalHandler}>Find Out More</button>{' '}
-                                <button type = "button" id = {event.name} onClick = {handleEventDelete}>Delete</button>{' '}
-                                <div type="button" className="edit-button" onClick={() => setShowEditModal(true)}> Edit Event </div>
+                                <button className="button" type = "button" id = {event.name} onClick = {modalHandler}>Find Out More</button>{' '}
+                                <button className="button" type = "button" id = {event.name} onClick = {handleEventDelete}>Delete</button>{' '}
+                                <button className="edit-button" type="button"  onClick={() => setShowEditModal(true)}> <EditIcon/> </button>
                                 <Modal title="Edit" show={showEditModal} setShow={setShowEditModal}>
-                                    <AddEvent addEvent={handleEditEvent}/>
-                                </Modal>
-                                    {/*
-                                    <div onClick={handleEventDelete}>
+                                    <AddEvent addEvent={handleEditEvent} eventName={eventName} setEventName={setEventName}
+                                        location={location} setLocation={setLocation} dateTime={dateTime} setDateTime={setDateTime}
+                                        desc={desc} setDesc={setDesc}/>
+                                </Modal> 
+                                    {/* <div onClick={handleEventDelete}>
                                         <DeleteIcon type="button" pointerEvents="none"></DeleteIcon>
-                                    </div>
-                    */}
+                                    </div> */}
+                    
                             </div>
 
                             {/* <Modal id = {event.name+"-modal"} show={showDesModal} setShow={setShowDesModal}>
@@ -168,9 +177,8 @@ function Events() {
                                     <p>Date&Time: {event.time}</p>
                                     <p>Description: {event.description}</p> 
                                 </div>
-                            </Modal> */}
+                            </Modal>  */}
 
-                            
                             <div id={event.name+"-modal"} class="modal">
                                 <div className="modal-content">
                                     <span className="close" onClick={close}>
@@ -189,8 +197,10 @@ function Events() {
                         </section>
                         
                     ))}
+                    
                 </div>
-                
+                <Pagination className="pages" eventsPerPage={postsPerPage} totalEvents={data.length} paginate={paginate}
+                    previousPage={previousPage} nextPage={nextPage}/>
             </div>
         </div>
     );

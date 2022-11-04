@@ -18,7 +18,7 @@ function Login() {
                     password: document.getElementById("password").value,
                 })
             }
-            fetch("/login", options)
+            fetch("http://localhost:3001/login", options)
                 .then(response => response.json())
             navigate('/Events')
 

@@ -23,7 +23,7 @@ function Config() {
                     type: type
                 })
             }
-            fetch("/register", options)
+            fetch("http://localhost:3001/register", options)
                 .then(response => response.json())
             navigate('/Events')
         }

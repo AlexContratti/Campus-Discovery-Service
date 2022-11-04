@@ -99,7 +99,7 @@ app.get("/events", async(req, res) => {
   }
 })
 
-app.delete("/event", jsonBodyParser, async(req, res) => {
+app.post("/deleteEvent", jsonBodyParser, async(req, res) => {
   try {
     console.log("/event DELETE Request Received");
     var {eventName} = req.body;
@@ -133,16 +133,15 @@ app.post("/users", jsonBodyParser, async (req, res) => {
   }
 })
 
-app.post("/events", jsonBodyParser, async (req, res) => {
+app.post("/editEvent", jsonBodyParser, async (req, res) => {
   try {
-    console.log("/events POST Request Received");
+    console.log("/editEvent POST Request Received");
 
-    var {eventName, updates } = req.body;
+    var {eventName, updates} = req.body;
 
     let changes = await db.updateEvent(eventName, updates);
-
-    res.status(200).send(changes)
-  } catch (err) {
+    res.status(200).send(changes);
+  } catch(err) {
     console.log(err);
     res.status(400);
   }

@@ -6,10 +6,14 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
+import {getInfo} from "../components/GlobalUser"
+
 
 export default function Sidebar () {
   const navigate = useNavigate()
   const handleExitClick = () => {navigate('/')}
+  const userInfo = getInfo();
+  const type = userInfo[2];
 
   return (
     <div className="nav-bar-container">
@@ -22,7 +26,7 @@ export default function Sidebar () {
           <li className="menu-item" onClick={handleExitClick}><LogoutIcon className="icon"/> Exit </li>
         </ul>
       </div>
-      <div className="profile"><AccountCircleIcon className="icon"/>User Type</div>
+      <div className="profile"><AccountCircleIcon className="icon"/> UserType </div>
     </div>
   )
 }

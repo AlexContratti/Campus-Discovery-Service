@@ -6,7 +6,7 @@ let namee = "";
 const setUserName = async(usern) => {
     username = usern
     let response = ""
-    const user = await fetch("/users", {
+    const user = await fetch("http://localhost:3001/users", {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
