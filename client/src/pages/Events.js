@@ -23,7 +23,7 @@ function Events() {
     const [dateTime, setDateTime] = useState("")
     const [desc, setDesc] = useState("")
     const [max_capacity, setMaxCapacity] = useState("")
-    const [rsvp, setRSVP] = useState("")
+    const [rsvp, setRSVP] = useState([])
 
     const [currPage, setCurrPage] = useState(1);
     const [postsPerPage] = useState(10);
@@ -136,21 +136,29 @@ function Events() {
         }
     }
 
-    const handleRSVP = async () => {
+    const handleRSVP = async (event) => {
         try {
             console.log("handler")
-            const username = await fetch("http://localhost:3001/users")
+            let event;
+            //const username = await fetch("http://localhost:3001/users")
+            await fetch("http://localhost:3001/event", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    eventName: event.target.id,
+                })
+            }).then(response => event = response)
             const edit = await fetch("http://localhost:3001/editEvent", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    eventName: eventName,
+                    eventName: event.target.id,
                     updates: {
-                        location: location,
-                        time: dateTime,
-                        description: desc,
-                        max_capacity: max_capacity,
-                        rsvp: rsvp + " " + username
+                        location: event.location,
+                        time: event.dateTime,
+                        description: event.desc,
+                        max_capacity: event.max_capacity,
+                        rsvp: event.rsvp.push(localStorage.getItem("name"))
                     }
                 })
             })
