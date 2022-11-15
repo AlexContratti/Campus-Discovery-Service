@@ -178,7 +178,7 @@ function Events() {
                                     {/* <div onClick={handleEventDelete}>
                                         <DeleteIcon type="button" pointerEvents="none"></DeleteIcon>
                                     </div> */}
-                    
+                                <button className="button" type = "button" id= {event.name} onClick = {' '}>RSVP</button>{' '}
                             </div>
 
                             {/* <Modal id = {event.name+"-modal"} show={showDesModal} setShow={setShowDesModal}>
