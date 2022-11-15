@@ -22,6 +22,8 @@ function Events() {
     const [location, setLocation] = useState("")
     const [dateTime, setDateTime] = useState("")
     const [desc, setDesc] = useState("")
+    const [max_capacity, setMaxCapacity] = useState("")
+    const [rsvp, setRSVP] = useState("")
 
     const [currPage, setCurrPage] = useState(1);
     const [postsPerPage] = useState(10);
@@ -70,6 +72,8 @@ function Events() {
                 location: location,
                 dateTime: dateTime,
                 description: desc,
+                max_capacity: max_capacity,
+                rsvp: rsvp
             })
         }).then(console.log).catch(console.error)
         console.log(add)
@@ -118,7 +122,8 @@ function Events() {
                     updates: {
                         location: location,
                         time: dateTime,
-                        description: desc
+                        description: desc,
+                        max_capacity: max_capacity
                     }
                 })
             })
@@ -127,6 +132,33 @@ function Events() {
             setShowEditModal(false);
             alert("Edits made!")
         } catch(err){
+            console.error()
+        }
+    }
+
+    const handleRSVP = async () => {
+        try {
+            console.log("handler")
+            const username = await fetch("http://localhost:3001/users")
+            const edit = await fetch("http://localhost:3001/editEvent", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    eventName: eventName,
+                    updates: {
+                        location: location,
+                        time: dateTime,
+                        description: desc,
+                        max_capacity: max_capacity,
+                        rsvp: rsvp + " " + username
+                    }
+                })
+            })
+            setChanged(changed + 1)
+            console.log("end")
+            setShowEditModal(false);
+            alert("RSVP Successful!")
+        } catch (err) {
             console.error()
         }
     }
@@ -154,7 +186,8 @@ function Events() {
                     <Modal title="Add" show={showModal} setShow={setShowModal}>
                         <AddEvent  addEvent={handleAddEvent} eventName={eventName} setEventName={setEventName}
                             location={location} setLocation={setLocation} dateTime={dateTime} setDateTime={setDateTime}
-                            desc={desc} setDesc={setDesc}/>
+                            desc={desc} setDesc={setDesc} max_capacity={max_capacity} setMaxCapacity={setMaxCapacity} rsvp={rsvp}
+                            setRSVP = {setRSVP}/>
                     </Modal>
                     {/*<div className="delete-button" onClick={() => setShowModal(true)}>Delete</div>*/}
                 </div>
@@ -173,12 +206,13 @@ function Events() {
                                 <Modal title="Edit" show={showEditModal} setShow={setShowEditModal}>
                                     <AddEvent addEvent={handleEditEvent} eventName={eventName} setEventName={setEventName}
                                         location={location} setLocation={setLocation} dateTime={dateTime} setDateTime={setDateTime}
-                                        desc={desc} setDesc={setDesc}/>
+                                        desc={desc} setDesc={setDesc} max_capacity={max_capacity} setMaxCapacity={setMaxCapacity} rsvp={rsvp}
+                                        setRSVP={setRSVP}/>
                                 </Modal> 
                                     {/* <div onClick={handleEventDelete}>
                                         <DeleteIcon type="button" pointerEvents="none"></DeleteIcon>
                                     </div> */}
-                                <button className="button" type = "button" id= {event.name} onClick = {' '}>RSVP</button>{' '}
+                                <button className="button" type = "button" id= {event.name} onClick = {handleRSVP}>RSVP</button>{' '}
                                 <button className="button" type = "button" id= {event.name} onClick = {' '}>Cancel RSVP</button>{' '}
                             </div>
 
@@ -203,6 +237,8 @@ function Events() {
                                         <p>Location: {event.location == null ? "No location" : event.location}</p>
                                         <p>Date&Time: {event.time == null ? "No time" : event.time}</p>
                                         <p>Description: {event.description == null ? "No description" : event.description}</p> 
+                                        <p>Maximum Capacity: {event.max_capacity == null ? "None" : event.max_capacity}</p>
+                                        <p>RSVP List: {event.rsvp == null ? "Empty" : event.rsvp} </p>
                                     </div>
                                 </div>
                             </div>
