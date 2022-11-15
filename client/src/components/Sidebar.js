@@ -6,19 +6,23 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
-import {getInfo} from "../components/GlobalUser"
 
 
 export default function Sidebar () {
   const navigate = useNavigate()
   const [type, setType] = useState("")
-  const handleExitClick = () => {navigate('/')}
+  const handleExitClick = () => {
+    navigate('/');
+    localStorage.removeItem("username")
+    localStorage.removeItem("name")
+    localStorage.removeItem("type")
+  }
 
   useEffect(() => {
-    //setType(localStorage.getItem("type"))
-    getInfo().then(res => setType(res[2]));
-    // console.log(localStorage.getItem("username"))
-    // console.log(type)
+    setTimeout(() => {
+      console.log(localStorage.getItem("type"))
+      setType(localStorage.getItem("type"))
+    }, 5)
   });
 
   

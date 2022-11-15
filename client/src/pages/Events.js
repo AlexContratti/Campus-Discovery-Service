@@ -1,12 +1,11 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react'
-import {Link } from "react-router-dom";
+import {Link, Navigate, useNavigate } from "react-router-dom";
 import Sidebar from '../components/Sidebar';
 import './Events.css';
 import AddIcon from '@mui/icons-material/Add';
 import Modal from "../components/Modal";
 import AddEvent from "../components/AddEvent";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {getInfo} from "../components/GlobalUser"
 import Pagination from "../components/Pagination"
 import EditIcon from '@mui/icons-material/Edit';
 import Edit from '@mui/icons-material/Edit';
@@ -31,8 +30,17 @@ function Events() {
     const indexOfFirstPost = Math.max(indexOfLastPost - postsPerPage, (currPage - 1) * postsPerPage);
     const currEvents = data.slice(indexOfFirstPost, indexOfLastPost);
 
+    const navigate = useNavigate()
+
 
     var modal = null
+    useEffect(() => {
+        setTimeout(() => {
+            if (localStorage.getItem("name") === null) {
+                navigate("/")
+            }
+        }, 250)
+    }, [])
     useEffect( () => {
         fetch("http://localhost:3001/events")
             .then(res => res.json())
@@ -53,13 +61,12 @@ function Events() {
 
     const handleAddEvent = async () => {
         setShowModal(false)
-        let userInfo = await getInfo()
         const add = await fetch("http://localhost:3001/createEvent", {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 eventName: eventName,
-                host: userInfo[1],
+                host: localStorage.getItem("name"),
                 location: location,
                 dateTime: dateTime,
                 description: desc,
@@ -85,10 +92,8 @@ function Events() {
                 eventName: e.target.id,
             })
         }).then(res => res.json()).then(data => event = data[0])
-        let userInfo = await getInfo()
 
-        console.log(userInfo[2], userInfo[1], event.host)
-        if (userInfo[2] === "Organizer" || userInfo[1] === event.host) {
+        if (localStorage.getItem("type") === "Organizer" || localStorage.getItem("name") === event.host) {
             const del = await fetch("http://localhost:3001/deleteEvent", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
@@ -97,6 +102,8 @@ function Events() {
                 })
             }).then(console.log).catch(console.error)
             setChanged(changed + 1)
+        } else {
+            alert("You are not an organizer nor the event host!");
         }
     }
 
@@ -118,6 +125,7 @@ function Events() {
             setChanged(changed + 1)
             console.log("end")
             setShowEditModal(false);
+            alert("Edits made!")
         } catch(err){
             console.error()
         }

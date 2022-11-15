@@ -20,7 +20,10 @@ const setUserName = async(usern) => {
     type = user.type
     namee = user.name
     
-    console.log(namee + " " + type)
+    localStorage.setItem("username", username)
+    localStorage.setItem("name", namee)
+    localStorage.setItem("type", type)
+    console.log(localStorage.getItem("type"))
 }
 
 const getInfo = async() => {
