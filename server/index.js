@@ -60,7 +60,7 @@ app.post("/login", jsonBodyParser, async (req, res) => {
 app.post("/createEvent", jsonBodyParser, async (req, res) => {
   try {
     console.log("/createEvent POST Request received");
-    var {eventName, host, location, dateTime, description} = req.body;
+    var {eventName, host, location, dateTime, description, max_capacity, rsvp} = req.body;
    /*
     if (!eventName || !host || !location || !description || !dateTime || dateTime.length < 16) {
       res.status(400).send("Invalid inputs");
@@ -72,7 +72,9 @@ app.post("/createEvent", jsonBodyParser, async (req, res) => {
       description: description,
       host: host,
       location: location,
-      time: dateTime
+      time: dateTime,
+      max_capacity: max_capacity,
+      rsvp: rsvp
     });
 
     if (validated) {

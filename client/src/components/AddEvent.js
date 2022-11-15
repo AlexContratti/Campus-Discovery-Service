@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import './AddEvent.css'
 import CheckIcon from '@mui/icons-material/Check';
 
-function AddEvent ({addEvent, eventName, setEventName, location, setLocation, dateTime, setDateTime, desc, setDesc}) {
+function AddEvent ({addEvent, eventName, setEventName, location, setLocation, dateTime, setDateTime, desc, setDesc, maximum_capacity, setMaxCapacity}) {
 
     return (
       <div className="add-event-container">
@@ -27,6 +27,11 @@ function AddEvent ({addEvent, eventName, setEventName, location, setLocation, da
                 <div className='title'>Description:</div>
                 <input type='text' id="description" className='input-text' onChange={e => setDesc(e.target.value)}></input>
             </div>
+            <div className='input'>
+                <div className='title'>Maximum Capacity</div>
+                <input type='text' id="maximum_capacity" className='input-text' onChange={e => setMaxCapacity(e.target.value)}></input>
+            </div>
+            
         
         <div className="save-button" onClick={addEvent}> <CheckIcon/> Save & Publish </div>
             
