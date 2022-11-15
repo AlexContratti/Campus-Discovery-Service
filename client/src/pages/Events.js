@@ -15,7 +15,8 @@ function Events() {
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDesModal, setShowDesModal] = useState(false);
-    const [data, setData] = useState([]);   
+    const [data, setData] = useState([]);
+    const [changed, setChanged] = useState(0)   
     const eventtiles = useRef(null)
 
     const [eventName, setEventName] = useState("")
@@ -36,7 +37,7 @@ function Events() {
         fetch("http://localhost:3001/events")
             .then(res => res.json())
             .then(data => setData(data));
-    }, []);
+    }, [changed]);
 
     const paginate = (pageNumber) => {
         setCurrPage(pageNumber)
@@ -53,7 +54,7 @@ function Events() {
     const handleAddEvent = async () => {
         setShowModal(false)
         let userInfo = await getInfo()
-        const add = fetch("http://localhost:3001/createEvent", {
+        const add = await fetch("http://localhost:3001/createEvent", {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -65,6 +66,7 @@ function Events() {
             })
         }).then(console.log).catch(console.error)
         console.log(add)
+        setChanged(changed + 1)
     }
 
     const handleEventDelete = async (e) => {
@@ -87,13 +89,14 @@ function Events() {
 
         console.log(userInfo[2], userInfo[1], event.host)
         if (userInfo[2] === "Organizer" || userInfo[1] === event.host) {
-            const del = fetch("http://localhost:3001/deleteEvent", {
+            const del = await fetch("http://localhost:3001/deleteEvent", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     eventName: e.target.id,
                 })
             }).then(console.log).catch(console.error)
+            setChanged(changed + 1)
         }
     }
 
@@ -112,6 +115,7 @@ function Events() {
                     }
                 })
             })
+            setChanged(changed + 1)
             console.log("end")
             setShowEditModal(false);
         } catch(err){
