@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState, useEffect, useRef} from "react"
 import './Sidebar.css'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import EventIcon from '@mui/icons-material/Event';
@@ -11,9 +11,17 @@ import {getInfo} from "../components/GlobalUser"
 
 export default function Sidebar () {
   const navigate = useNavigate()
+  const [type, setType] = useState("")
   const handleExitClick = () => {navigate('/')}
-  const userInfo = getInfo();
-  const type = userInfo[2];
+
+  useEffect(() => {
+    //setType(localStorage.getItem("type"))
+    getInfo().then(res => setType(res[2]));
+    // console.log(localStorage.getItem("username"))
+    // console.log(type)
+  });
+
+  
 
   return (
     <div className="nav-bar-container">
@@ -26,7 +34,7 @@ export default function Sidebar () {
           <li className="menu-item" onClick={handleExitClick}><LogoutIcon className="icon"/> Exit </li>
         </ul>
       </div>
-      <div className="profile"><AccountCircleIcon className="icon"/> UserType </div>
+      <div className="profile"><AccountCircleIcon className="icon"/> {type} </div>
     </div>
   )
 }

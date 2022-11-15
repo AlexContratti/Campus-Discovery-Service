@@ -2,6 +2,7 @@ import React from "react"
 import {Link } from "react-router-dom";
 import './Config.css';
 import { useNavigate } from 'react-router-dom';
+import {setUserName} from "../components/GlobalUser"
 
 
 function Config() {
@@ -24,8 +25,14 @@ function Config() {
                 })
             }
             fetch("http://localhost:3001/register", options)
-                .then(response => response.json())
-            navigate('/Events')
+            .then(response => {
+                if (response.status == 201) {
+                    setUserName(document.getElementById("username").value)
+                    navigate('/Events')
+                } else {
+                    alert("Invalid")
+                }
+            })
         }
     }
 

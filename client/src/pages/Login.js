@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState} from "react"
 import {Link } from "react-router-dom";
 import "./Login.css";
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,8 @@ import {setUserName} from "../components/GlobalUser"
 
 function Login() {
     const navigate = useNavigate()
+    const [validateLogin, setValidateLogin] = useState(403);
+
     const handleSubmitClick = (event) => {
         if (document.getElementById("username").value.length === 0 ||  document.getElementById("password").value.length === 0) {
             navigate('/Login')
@@ -19,10 +21,14 @@ function Login() {
                 })
             }
             fetch("http://localhost:3001/login", options)
-                .then(response => response.json())
-            navigate('/Events')
-
-            setUserName(document.getElementById("username").value)
+                .then(response => {
+                    if (response.status == 200) {
+                        setUserName(document.getElementById("username").value)
+                        navigate('/Events')
+                    } else {
+                        alert("Invalid Login")
+                    }
+                })
         }
     }
     
