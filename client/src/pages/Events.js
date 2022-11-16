@@ -13,7 +13,7 @@ import Edit from '@mui/icons-material/Edit';
 function Events() {
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [showDesModal, setShowDesModal] = useState(false);
+    const [showRSVPModal, setShowRSVPModal] = useState(false);
     const [data, setData] = useState([]);
     const [changed, setChanged] = useState(0)   
     const eventtiles = useRef(null)
@@ -23,7 +23,12 @@ function Events() {
     const [dateTime, setDateTime] = useState("")
     const [desc, setDesc] = useState("")
     const [max_capacity, setMaxCapacity] = useState("")
-    const [rsvp, setRSVP] = useState([])
+    const [rsvp, setRSVP] = useState({
+        "Yes": [],
+        "Maybe": [],
+        "No": []
+    })
+    const [removal, setRemoval] = useState("")
 
     const [currPage, setCurrPage] = useState(1);
     const [postsPerPage] = useState(10);
@@ -41,7 +46,7 @@ function Events() {
             if (localStorage.getItem("name") === null) {
                 navigate("/")
             }
-        }, 250)
+        }, 1000)
     }, [])
     useEffect( () => {
         fetch("http://localhost:3001/events")
@@ -135,38 +140,77 @@ function Events() {
             console.error()
         }
     }
-
     const handleRSVP = async (e) => {
         try {
-            console.log("handler")
             let event;
-            //const username = await fetch("http://localhost:3001/users")
             await fetch("http://localhost:3001/event", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
-                    eventName: e.target.id,
+                    eventName: e.target.id.substring(0, e.target.id.length - 4),
                 })
             }).then(response => response.json()).then(data => event = data[0])
             console.log(event)
 
-            if (event.rsvp.includes(localStorage.getItem("name"))) {
-                alert("Already RSVP'ed")
-                return;
+            let op = e.target.id.substring(e.target.id.length - 3)
+            let name = localStorage.getItem("name")
+            console.log(op)
+            if (op == "Yes") {
+                if (event.rsvp.Yes.includes(name)) {
+                    alert("Already RSVP-ed!");
+                    return;
+                }
+                if (event.rsvp.Yes.length == event.max_capacity) {
+                    alert("Event at max capacity!");
+                    return;
+                }
+                let index = event.rsvp.Maybe.indexOf(name)
+                if (index > -1) {
+                    event.rsvp.Maybe.splice(index, 1)
+                }
+                index = event.rsvp.No.indexOf(name)
+                if (index > -1) {
+                    event.rsvp.No.splice(index, 1)
+                }
+                event.rsvp.Yes.push(name)
+            } else if (op == "May") {
+                if (event.rsvp.Maybe.includes(name)) {
+                    alert("Already RSVP-ed!");
+                    return;
+                }
+                let index = event.rsvp.Yes.indexOf(name)
+                if (index > -1) {
+                    event.rsvp.Yes.splice(index, 1)
+                    console.log(event.rsvp.Yes)
+                }
+                index = event.rsvp.No.indexOf(name)
+                if (index > -1) {
+                    event.rsvp.No.splice(index, 1)
+                }
+                event.rsvp.Maybe.push(name)
+            } else {
+                if (event.rsvp.No.includes(name)) {
+                    alert("Already RSVP-ed!");
+                    return;
+                }
+                let index = event.rsvp.Yes.indexOf(name)
+                if (index > -1) {
+                    event.rsvp.Yes.splice(index, 1)
+                }
+                index = event.rsvp.Maybe.indexOf(name)
+                if (index > -1) {
+                    event.rsvp.Maybe.splice(index, 1)
+                }
+                event.rsvp.No.push(name)
             }
-
-            event.rsvp.push(localStorage.getItem("name"))
+            console.log(event.rsvp)
 
             const edit = await fetch("http://localhost:3001/editEvent", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    eventName: e.target.id,
+                    eventName: e.target.id.substring(0, e.target.id.length - 4),
                     updates: {
-                        location: event.location,
-                        time: event.dateTime,
-                        description: event.desc,
-                        max_capacity: event.max_capacity,
                         rsvp: event.rsvp
                     }
                 })
@@ -180,6 +224,36 @@ function Events() {
         }
     }
 
+    const handleRemove = async (e) => {
+        let event;
+        await fetch("http://localhost:3001/event", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                eventName: e.target.id,
+            })
+        }).then(response => response.json()).then(data => event = data[0])
+        console.log(event)
+
+        let index = event.rsvp.Yes.indexOf(removal)
+        if (index <= -1) {
+            alert("Person not found in RSVP list!")
+            return;
+        }
+        event.rsvp.Yes.splice(index, 1)
+        const edit = await fetch("http://localhost:3001/editEvent", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                eventName: e.target.id,
+                updates: {
+                    rsvp: event.rsvp
+                }
+            })
+        })
+        setChanged(changed + 1)
+    }
+
     const modalHandler = (event) => {
         console.log(event.target.id)
         modal = document.getElementById(event.target.id + "-modal")
@@ -188,7 +262,23 @@ function Events() {
         //setShowDesModal(true);
     }
 
+    const rsvpModalHandler = (event) => {
+        console.log(event.target.id)
+        modal = document.getElementById(event.target.id + "-rsvp")
+        modal.style.display = "block"
+        document.getElementById(event.target.id+"-rsvp").show = true;
+        //setShowDesModal(true);
+    }
+
+    const adminModalHandler = (event) => {
+        console.log(event.target.id)
+        modal = document.getElementById(event.target.id + "-admin")
+        modal.style.display = "block"
+        document.getElementById(event.target.id+"-admin").show = true;
+    }
+
     const close = (event) => {
+        modal = document.getElementById(event.target.id)
         modal.style.display = "none"
     }
 
@@ -228,8 +318,10 @@ function Events() {
                                     {/* <div onClick={handleEventDelete}>
                                         <DeleteIcon type="button" pointerEvents="none"></DeleteIcon>
                                     </div> */}
-                                <button className="button" type = "button" id= {event.name} onClick = {handleRSVP}>RSVP</button>{' '}
-                                <button className="button" type = "button" id= {event.name} onClick = {' '}>Cancel RSVP</button>{' '}
+                                <button className="button" type ="button" id={event.name} onClick ={rsvpModalHandler}>RSVP</button>{' '}
+                                {localStorage.getItem("name") != event.host ? "" :
+                                    <button className="button" type = "button" id = {event.name} onClick={adminModalHandler}>Manage RSVP List</button>
+                                }
                             </div>
 
                             {/* <Modal id = {event.name+"-modal"} show={showDesModal} setShow={setShowDesModal}>
@@ -241,10 +333,41 @@ function Events() {
                                     <p>Description: {event.description}</p> 
                                 </div>
                             </Modal>  */}
+                            <div id={event.name+"-rsvp"} class="modal">
+                                <div className="modal-content">
+                                    <span className="close" id={event.name+"-rsvp"} onClick={close}>
+                                        &times;
+                                    </span>
+                                    <div className='des-modal-content'>
+                                        <button className="button" type="button" id={event.name+"-Yes"} onClick={handleRSVP}>Will Attend</button>{' '}
+                                        <button className="button" type="button" id={event.name+"-May"} onClick={handleRSVP}>Maybe</button>{' '}
+                                        <button className="button" type="button" id={event.name+"-Noo"} onClick={handleRSVP}>Will Not Attend</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id={event.name+"-admin"} class="modal">
+                                <div className="modal-content">
+                                    <span className="close" id={event.name+"-admin"} onClick={close}>
+                                        &times;
+                                    </span>
+                                    <div className='des-modal-content'>
+                                        <h4>Current RSVP List</h4>
+                                        {event.rsvp == null ? "None" : (
+                                            <section>
+                                                {event.rsvp.Yes.map(p => <ul>{p}</ul>)}
+                                            </section>
+                                        )}
+                                        <h4>Enter name you would like to remove:</h4>
+                                        <input type='text' id="removal" className='input-text'  onChange={e => setRemoval(e.target.value)}></input>
+                                        <div className="save-button" id={event.name} onClick={handleRemove}>Submit </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div id={event.name+"-modal"} class="modal">
                                 <div className="modal-content">
-                                    <span className="close" onClick={close}>
+                                    <span className="close" id={event.name+"-modal"} onClick={close}>
                                         &times;
                                     </span>
                                     <div className='des-modal-content'>
@@ -254,9 +377,18 @@ function Events() {
                                         <p>Date&Time: {event.time == null ? "No time" : event.time}</p>
                                         <p>Description: {event.description == null ? "No description" : event.description}</p> 
                                         <p>Maximum Capacity: {event.max_capacity == null ? "None" : event.max_capacity}</p>
+                                        <p>Current Capacity: {event.rsvp == null ? 0 + "/" + event.max_capacity : event.rsvp.Yes.length + "/" + event.max_capacity}</p>
                                         <p>RSVP List: </p>
-                                        {event.rsvp == null || !(Array.isArray(event.rsvp)) ? "None" : 
-                                            event.rsvp.map((p) => <ul>{p}</ul>)}
+                                        {event.rsvp == null ? "None" : (
+                                            <section>
+                                                <h5>Will Attend:</h5>
+                                                {event.rsvp.Yes.map(p => <ul>{p}</ul>)}
+                                                <h5>Maybe</h5>
+                                                {event.rsvp.Maybe.map(p => <ul>{p}</ul>)}
+                                                <h5>Will Not</h5>
+                                                {event.rsvp.No.map(p => <ul>{p}</ul>)}
+                                            </section>
+                                        )}
                                     </div>
                                 </div>
                             </div>

@@ -118,7 +118,6 @@ class Database {
     }
 
     async updateEvent(eventName, updates) {
-        console.log(updates.max_capacity)
         const result = await this.client.db("campus_discovery").collection("events").updateOne(
             {"name": eventName}, {$set: updates}
         )

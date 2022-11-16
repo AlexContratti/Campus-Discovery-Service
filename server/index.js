@@ -140,7 +140,6 @@ app.post("/users", jsonBodyParser, async (req, res) => {
 app.post("/editEvent", jsonBodyParser, async (req, res) => {
   try {
     console.log("/editEvent POST Request Received");
-    console.log(req.body)
     var {eventName, updates} = req.body;
 
     var fUpdates = {}
