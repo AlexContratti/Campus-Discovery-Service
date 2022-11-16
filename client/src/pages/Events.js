@@ -395,7 +395,7 @@ function Events() {
                                         <h4>Current RSVP List</h4>
                                         {event.rsvp == null ? "None" : (
                                             <section>
-                                                {event.rsvp.Yes.map(p => <ul>{p}</ul>)}
+                                                {event.rsvp.Yes == null ? "" : event.rsvp.Yes.map(p => <ul>{p}</ul>)}
                                             </section>
                                         )}
                                         <h4>Enter name you would like to remove:</h4>
