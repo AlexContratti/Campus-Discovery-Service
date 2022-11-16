@@ -429,7 +429,7 @@ function Events() {
                                         <p>Date&Time: {event.time == null ? "No time" : event.time}</p>
                                         <p>Description: {event.description == null ? "No description" : event.description}</p> 
                                         <p>Maximum Capacity: {event.max_capacity == null ? "None" : event.max_capacity}</p>
-                                        <p>Current Capacity: {event.rsvp == null ? 0 + "/" + event.max_capacity : event.rsvp.Yes.length + "/" + event.max_capacity}</p>
+                                        <p>Current Capacity: {(event.rsvp === null || event.rsvp.Yes === null) ? 0 + "/" + event.max_capacity : event.rsvp.Yes.length + "/" + event.max_capacity}</p>
                                         <p>RSVP List: </p>
                                         {event.rsvp == null ? "None" : (
                                             <section>
