@@ -429,16 +429,16 @@ function Events() {
                                         <p>Date&Time: {event.time == null ? "No time" : event.time}</p>
                                         <p>Description: {event.description == null ? "No description" : event.description}</p> 
                                         <p>Maximum Capacity: {event.max_capacity == null ? "None" : event.max_capacity}</p>
-                                        <p>Current Capacity: {(event.rsvp === null || event.rsvp.Yes === null) ? 0 + "/" + event.max_capacity : event.rsvp.Yes.length + "/" + event.max_capacity}</p>
+                                        <p>Current Capacity: {(event.rsvp === undefined || event.rsvp.Yes === undefined) ? 0 + "/" + event.max_capacity : event.rsvp.Yes.length + "/" + event.max_capacity}</p>
                                         <p>RSVP List: </p>
-                                        {event.rsvp == null ? "None" : (
+                                        {event.rsvp == undefined ? "None" : (
                                             <section>
                                                 <h5>Will Attend:</h5>
-                                                {event.rsvp.Yes.map(p => <ul>{p}</ul>)}
+                                                {event.rsvp.Yes === undefined ? "" : event.rsvp.Yes.map(p => <ul>{p}</ul>)}
                                                 <h5>Maybe</h5>
-                                                {event.rsvp.Maybe.map(p => <ul>{p}</ul>)}
+                                                {event.rsvp.Maybe === undefined ? "" : event.rsvp.Maybe.map(p => <ul>{p}</ul>)}
                                                 <h5>Will Not</h5>
-                                                {event.rsvp.No.map(p => <ul>{p}</ul>)}
+                                                {event.rsvp.No === undefined ? "" : event.rsvp.No.map(p => <ul>{p}</ul>)}
                                             </section>
                                         )}
                                     </div>
