@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react'
-import {Link, Navigate, useNavigate } from "react-router-dom";
+import {isRouteErrorResponse, Link, Navigate, useNavigate } from "react-router-dom";
 import Sidebar from '../components/Sidebar';
 import './Events.css';
 import AddIcon from '@mui/icons-material/Add';
@@ -136,7 +136,7 @@ function Events() {
         }
     }
 
-    const handleRSVP = async (event) => {
+    const handleRSVP = async (e) => {
         try {
             console.log("handler")
             let event;
@@ -145,20 +145,29 @@ function Events() {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
-                    eventName: event.target.id,
+                    eventName: e.target.id,
                 })
-            }).then(response => event = response)
+            }).then(response => response.json()).then(data => event = data[0])
+            console.log(event)
+
+            if (event.rsvp.includes(localStorage.getItem("name"))) {
+                alert("Already RSVP'ed")
+                return;
+            }
+
+            event.rsvp.push(localStorage.getItem("name"))
+
             const edit = await fetch("http://localhost:3001/editEvent", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    eventName: event.target.id,
+                    eventName: e.target.id,
                     updates: {
                         location: event.location,
                         time: event.dateTime,
                         description: event.desc,
                         max_capacity: event.max_capacity,
-                        rsvp: event.rsvp.push(localStorage.getItem("name"))
+                        rsvp: event.rsvp
                     }
                 })
             })
@@ -214,8 +223,7 @@ function Events() {
                                 <Modal title="Edit" show={showEditModal} setShow={setShowEditModal}>
                                     <AddEvent addEvent={handleEditEvent} eventName={eventName} setEventName={setEventName}
                                         location={location} setLocation={setLocation} dateTime={dateTime} setDateTime={setDateTime}
-                                        desc={desc} setDesc={setDesc} max_capacity={max_capacity} setMaxCapacity={setMaxCapacity} rsvp={rsvp}
-                                        setRSVP={setRSVP}/>
+                                        desc={desc} setDesc={setDesc} max_capacity={max_capacity} setMaxCapacity={setMaxCapacity}/>
                                 </Modal> 
                                     {/* <div onClick={handleEventDelete}>
                                         <DeleteIcon type="button" pointerEvents="none"></DeleteIcon>
@@ -246,7 +254,9 @@ function Events() {
                                         <p>Date&Time: {event.time == null ? "No time" : event.time}</p>
                                         <p>Description: {event.description == null ? "No description" : event.description}</p> 
                                         <p>Maximum Capacity: {event.max_capacity == null ? "None" : event.max_capacity}</p>
-                                        <p>RSVP List: {event.rsvp == null ? "Empty" : event.rsvp} </p>
+                                        <p>RSVP List: </p>
+                                        {event.rsvp == null || !(Array.isArray(event.rsvp)) ? "None" : 
+                                            event.rsvp.map((p) => <ul>{p}</ul>)}
                                     </div>
                                 </div>
                             </div>

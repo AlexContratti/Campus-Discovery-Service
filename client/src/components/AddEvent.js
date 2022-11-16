@@ -1,9 +1,16 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import './AddEvent.css'
 import CheckIcon from '@mui/icons-material/Check';
 
 function AddEvent ({addEvent, eventName, setEventName, location, setLocation, dateTime, setDateTime, desc, setDesc, maximum_capacity, setMaxCapacity}) {
-
+    useEffect(() => {
+        setEventName("");
+        setLocation("");
+        setDateTime("");
+        setDesc("");
+        setMaxCapacity("");
+    }, [])
+    
     return (
       <div className="add-event-container">
         <div className='input-container'>

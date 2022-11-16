@@ -60,21 +60,23 @@ app.post("/login", jsonBodyParser, async (req, res) => {
 app.post("/createEvent", jsonBodyParser, async (req, res) => {
   try {
     console.log("/createEvent POST Request received");
-    var {eventName, host, location, dateTime, description, max_capacity, rsvp} = req.body;
+    console.log(req.body);
+    //var {eventName, description, host, location, dateTime} = req.body;
    /*
     if (!eventName || !host || !location || !description || !dateTime || dateTime.length < 16) {
       res.status(400).send("Invalid inputs");
       return;
     }
   */
+    //console.log(eventName + " " + host + " " + location + " " + dateTime + " " + description)
     let validated = await db.createEvent({
-      name: eventName,
-      description: description,
-      host: host,
-      location: location,
-      time: dateTime,
-      max_capacity: max_capacity,
-      rsvp: rsvp
+      name: req.body.eventName,
+      description: req.body.description,
+      host: req.body.host,
+      location: req.body.location,
+      time: req.body.dateTime,
+      max_capacity: req.body.max_capacity,
+      rsvp: req.body.rsvp
     });
 
     if (validated) {
@@ -138,10 +140,17 @@ app.post("/users", jsonBodyParser, async (req, res) => {
 app.post("/editEvent", jsonBodyParser, async (req, res) => {
   try {
     console.log("/editEvent POST Request Received");
-
+    console.log(req.body)
     var {eventName, updates} = req.body;
 
-    let changes = await db.updateEvent(eventName, updates);
+    var fUpdates = {}
+    for (var key in updates) {
+      if (updates[key] != "") {
+        fUpdates[key] = updates[key]
+      }
+    }
+    console.log(fUpdates)
+    let changes = await db.updateEvent(eventName, fUpdates);
     res.status(200).send(changes);
   } catch(err) {
     console.log(err);
