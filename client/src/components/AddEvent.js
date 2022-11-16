@@ -2,13 +2,15 @@ import React, {useEffect, useState} from 'react'
 import './AddEvent.css'
 import CheckIcon from '@mui/icons-material/Check';
 
-function AddEvent ({addEvent, eventName, setEventName, location, setLocation, dateTime, setDateTime, desc, setDesc, maximum_capacity, setMaxCapacity}) {
+function AddEvent ({addEvent, eventName, setEventName, location, setLocation, dateTime, setDateTime, desc, setDesc, maximum_capacity, setMaxCapacity,
+    inviteOnly, setInviteOnly}) {
     useEffect(() => {
         setEventName("");
         setLocation("");
         setDateTime("");
         setDesc("");
         setMaxCapacity("");
+        setInviteOnly("");
     }, [])
     
     return (
@@ -38,7 +40,13 @@ function AddEvent ({addEvent, eventName, setEventName, location, setLocation, da
                 <div className='title'>Maximum Capacity</div>
                 <input type='text' id="maximum_capacity" className='input-text' onChange={e => setMaxCapacity(e.target.value)}></input>
             </div>
-            
+            <div className="label"> Invite-Only: </div>
+            <label>
+                <select className="select" onChange={e => setInviteOnly(e.target.value)}>
+                    <option value = "Yes">Yes</option>
+                    <option value = "No">No</option>
+                </select>
+            </label>
         
         <div className="save-button" onClick={addEvent}> <CheckIcon/> Save & Publish </div>
             

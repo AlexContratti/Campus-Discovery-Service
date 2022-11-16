@@ -76,7 +76,9 @@ app.post("/createEvent", jsonBodyParser, async (req, res) => {
       location: req.body.location,
       time: req.body.dateTime,
       max_capacity: req.body.max_capacity,
-      rsvp: req.body.rsvp
+      rsvp: req.body.rsvp,
+      inviteOnly: req.body.inviteOnly,
+      inviteList: req.body.inviteList
     });
 
     if (validated) {

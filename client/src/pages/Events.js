@@ -29,6 +29,8 @@ function Events() {
         "No": []
     })
     const [removal, setRemoval] = useState("")
+    const [addition, setAddition] = useState("")
+    const [inviteOnly, setInviteOnly] = useState("No")
 
     const [currPage, setCurrPage] = useState(1);
     const [postsPerPage] = useState(10);
@@ -78,7 +80,9 @@ function Events() {
                 dateTime: dateTime,
                 description: desc,
                 max_capacity: max_capacity,
-                rsvp: rsvp
+                rsvp: rsvp,
+                inviteOnly: inviteOnly,
+                inviteList: []
             })
         }).then(console.log).catch(console.error)
         console.log(add)
@@ -128,7 +132,8 @@ function Events() {
                         location: location,
                         time: dateTime,
                         description: desc,
-                        max_capacity: max_capacity
+                        max_capacity: max_capacity,
+                        inviteOnly: inviteOnly
                     }
                 })
             })
@@ -254,6 +259,38 @@ function Events() {
         setChanged(changed + 1)
     }
 
+    const handleAddition = async(e) => {
+        let event;
+        await fetch("http://localhost:3001/event", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                eventName: e.target.id,
+            })
+        }).then(response => response.json()).then(data => event = data[0])
+        console.log(event)
+
+        let index = event.inviteList.indexOf(removal)
+        if (index > -1) {
+            alert("Person already in the invite list!")
+            return;
+        }
+
+        event.inviteList.push(addition)
+
+        const edit = await fetch("http://localhost:3001/editEvent", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                eventName: e.target.id,
+                updates: {
+                    inviteList: event.inviteList
+                }
+            })
+        })
+        setChanged(changed + 1)
+    }
+
     const modalHandler = (event) => {
         console.log(event.target.id)
         modal = document.getElementById(event.target.id + "-modal")
@@ -294,7 +331,7 @@ function Events() {
                         <AddEvent  addEvent={handleAddEvent} eventName={eventName} setEventName={setEventName}
                             location={location} setLocation={setLocation} dateTime={dateTime} setDateTime={setDateTime}
                             desc={desc} setDesc={setDesc} max_capacity={max_capacity} setMaxCapacity={setMaxCapacity} rsvp={rsvp}
-                            setRSVP = {setRSVP}/>
+                            setRSVP = {setRSVP} inviteOnly={inviteOnly} setInviteOnly={setInviteOnly}/>
                     </Modal>
                     {/*<div className="delete-button" onClick={() => setShowModal(true)}>Delete</div>*/}
                 </div>
@@ -313,12 +350,15 @@ function Events() {
                                 <Modal title="Edit" show={showEditModal} setShow={setShowEditModal}>
                                     <AddEvent addEvent={handleEditEvent} eventName={eventName} setEventName={setEventName}
                                         location={location} setLocation={setLocation} dateTime={dateTime} setDateTime={setDateTime}
-                                        desc={desc} setDesc={setDesc} max_capacity={max_capacity} setMaxCapacity={setMaxCapacity}/>
+                                        desc={desc} setDesc={setDesc} max_capacity={max_capacity} setMaxCapacity={setMaxCapacity} rsvp={rsvp}
+                                        setRSVP = {setRSVP} inviteOnly={inviteOnly} setInviteOnly={setInviteOnly}/>
                                 </Modal> 
                                     {/* <div onClick={handleEventDelete}>
                                         <DeleteIcon type="button" pointerEvents="none"></DeleteIcon>
                                     </div> */}
-                                <button className="button" type ="button" id={event.name} onClick ={rsvpModalHandler}>RSVP</button>{' '}
+                                {event.inviteOnly == null || event.host == localStorage.getItem("name") ||
+                                    ((event.inviteOnly == "No") || (event.inviteList.includes(localStorage.getItem("name")))) ?
+                                    <button className="button" type ="button" id={event.name} onClick ={rsvpModalHandler}>RSVP</button> : ""}
                                 {localStorage.getItem("name") != event.host ? "" :
                                     <button className="button" type = "button" id = {event.name} onClick={adminModalHandler}>Manage RSVP List</button>
                                 }
@@ -361,6 +401,18 @@ function Events() {
                                         <h4>Enter name you would like to remove:</h4>
                                         <input type='text' id="removal" className='input-text'  onChange={e => setRemoval(e.target.value)}></input>
                                         <div className="save-button" id={event.name} onClick={handleRemove}>Submit </div>
+                                        {event.inviteOnly === "Yes" ? 
+                                        <section>
+                                            <h4>Current Invite List</h4>
+                                            {event.inviteList == null ? "None" : (
+                                                <section>
+                                                    {event.inviteList.map(p => <ul>{p}</ul>)}
+                                                </section>
+                                            )}
+                                            <h4>Enter name you would like to add:</h4>
+                                            <input type='text' id="addition" className='input-text'  onChange={e => setAddition(e.target.value)}></input>
+                                            <div className="save-button" id={event.name} onClick={handleAddition}>Submit </div>
+                                        </section> : ""}
                                     </div>
                                 </div>
                             </div>
