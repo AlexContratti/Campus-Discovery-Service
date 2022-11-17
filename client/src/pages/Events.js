@@ -120,7 +120,7 @@ function Events() {
         }
     }
 
-    const handleEditEvent = async () => {
+    const handleEditEvent = async (event) => {
         try{
             console.log("handler")
             const edit = await fetch("http://localhost:3001/editEvent", {
