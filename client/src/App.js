@@ -6,6 +6,7 @@ import Config from './pages/Config.js';
 import Events from './pages/Events.js';
 import Start from './pages/Start.js';
 import Login from './pages/Login.js';
+import Registered from './pages/Registered.js'
 
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 
@@ -19,6 +20,7 @@ function App() {
         <Route path = "/start" element = {<Start />} />
         <Route path = "/config" element = {<Config />} />
         <Route path = "/login" element = {<Login />} />
+        <Route path = "/registered" element = {<Registered />} />
       </Routes>
     </BrowserRouter>
   );

@@ -24,7 +24,14 @@ export default function Sidebar () {
       setType(localStorage.getItem("type"))
     }, 5)
   });
+  
+  const handleAllEvents = (e) => {
+    navigate('/Events')
+  }
 
+  const handleRegistered = (e) => {
+    navigate('/Registered')
+  }
   
 
   return (
@@ -32,8 +39,8 @@ export default function Sidebar () {
       <div className="menu-container">
         <div className="header">DiscoverGT</div>
         <ul className="menu">
-          <li className="menu-item"><EventIcon className="icon"/> All Events</li>
-          <li className="menu-item"><EventAvailableIcon className="icon"/> Registered </li>
+          <li className="menu-item" onClick={handleAllEvents}><EventIcon className="icon"/> All Events</li>
+          <li className="menu-item" onClick={handleRegistered}><EventAvailableIcon className="icon"/> Registered </li>
           <li className="menu-item"><PersonOutlineIcon className="icon"/> Account </li>
           <li className="menu-item" onClick={handleExitClick}><LogoutIcon className="icon"/> Exit </li>
         </ul>
