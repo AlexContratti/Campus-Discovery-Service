@@ -59,7 +59,7 @@ class Database {
 
     async getAllEvents() {
         const results = await this.client.db("campus_discovery").collection("events").find().project({name:true, description:true,
-        host:true, location:true, time:true, max_capacity:true, rsvp: true, inviteOnly: true, inviteList: true}).toArray();
+        host:true, location:true, time:true, endTime:true, max_capacity:true, rsvp: true, inviteOnly: true, inviteList: true}).toArray();
 
         if (results.length > 0) {
             console.log("events found");

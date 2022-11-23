@@ -3,7 +3,7 @@ import './AddEvent.css'
 import CheckIcon from '@mui/icons-material/Check';
 
 function AddEvent ({addEvent, eventName, setEventName, location, setLocation, dateTime, setDateTime, desc, setDesc, maximum_capacity, setMaxCapacity,
-    inviteOnly, setInviteOnly}) {
+    inviteOnly, setInviteOnly, endDateTime, setEndDateTime}) {
     useEffect(() => {
         setEventName("");
         setLocation("");
@@ -11,6 +11,7 @@ function AddEvent ({addEvent, eventName, setEventName, location, setLocation, da
         setDesc("");
         setMaxCapacity("");
         setInviteOnly("");
+        setEndDateTime("");
     }, [])
     
     return (
@@ -31,6 +32,10 @@ function AddEvent ({addEvent, eventName, setEventName, location, setLocation, da
             <div className='input'>
                 <div className='title'>Date/Time:</div>
                 <input type='text' id="dateTime" className='input-text' onChange={e => setDateTime(e.target.value)}></input>
+            </div>
+            <div className='input'>
+                <div className='title'>End Date/Time:</div>
+                <input type='text' id="endDateTime" className='input-text' onChange={e => setEndDateTime(e.target.value)}></input>
             </div>
             <div className='input'>
                 <div className='title'>Description:</div>

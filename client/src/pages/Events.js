@@ -21,6 +21,7 @@ function Events() {
     const [eventName, setEventName] = useState("")
     const [location, setLocation] = useState("")
     const [dateTime, setDateTime] = useState("")
+    const [endDateTime, setEndDateTime] = useState("")
     const [desc, setDesc] = useState("")
     const [max_capacity, setMaxCapacity] = useState("")
     const [rsvp, setRSVP] = useState({
@@ -78,6 +79,7 @@ function Events() {
                 host: localStorage.getItem("name"),
                 location: location,
                 dateTime: dateTime,
+                endDateTime: endDateTime,
                 description: desc,
                 max_capacity: max_capacity,
                 rsvp: rsvp,
@@ -131,6 +133,7 @@ function Events() {
                     updates: {
                         location: location,
                         time: dateTime,
+                        endTime: endDateTime,
                         description: desc,
                         max_capacity: max_capacity,
                         inviteOnly: inviteOnly
@@ -319,7 +322,6 @@ function Events() {
         modal.style.display = "none"
     }
 
-    
     return (
         <div className="events-container">
             <div className="nav-bar"><Sidebar/></div>
@@ -331,7 +333,8 @@ function Events() {
                         <AddEvent  addEvent={handleAddEvent} eventName={eventName} setEventName={setEventName}
                             location={location} setLocation={setLocation} dateTime={dateTime} setDateTime={setDateTime}
                             desc={desc} setDesc={setDesc} max_capacity={max_capacity} setMaxCapacity={setMaxCapacity} rsvp={rsvp}
-                            setRSVP = {setRSVP} inviteOnly={inviteOnly} setInviteOnly={setInviteOnly}/>
+                            setRSVP = {setRSVP} inviteOnly={inviteOnly} setInviteOnly={setInviteOnly} endDateTime={endDateTime}
+                            setEndDateTime={setEndDateTime}/>
                     </Modal>
                     {/*<div className="delete-button" onClick={() => setShowModal(true)}>Delete</div>*/}
                 </div>
@@ -351,7 +354,8 @@ function Events() {
                                     <AddEvent addEvent={handleEditEvent} eventName={eventName} setEventName={setEventName}
                                         location={location} setLocation={setLocation} dateTime={dateTime} setDateTime={setDateTime}
                                         desc={desc} setDesc={setDesc} max_capacity={max_capacity} setMaxCapacity={setMaxCapacity} rsvp={rsvp}
-                                        setRSVP = {setRSVP} inviteOnly={inviteOnly} setInviteOnly={setInviteOnly}/>
+                                        setRSVP = {setRSVP} inviteOnly={inviteOnly} setInviteOnly={setInviteOnly} endDateTime={endDateTime}
+                                        setEndDateTime={setEndDateTime}/>
                                 </Modal> 
                                     {/* <div onClick={handleEventDelete}>
                                         <DeleteIcon type="button" pointerEvents="none"></DeleteIcon>
@@ -426,7 +430,7 @@ function Events() {
                                         <h2>{event.name == null ? "No name" : event.name}</h2>
                                         <p>Host: {event.host == null ? "No host" : event.host}</p>
                                         <p>Location: {event.location == null ? "No location" : event.location}</p>
-                                        <p>Date&Time: {event.time == null ? "No time" : event.time}</p>
+                                        <p>Date&Time: {event.time == null ? "No time" : event.time + " - " + (event.endTime === undefined ? "" : event.endTime)}</p>
                                         <p>Description: {event.description == null ? "No description" : event.description}</p> 
                                         <p>Maximum Capacity: {event.max_capacity == null ? "None" : event.max_capacity}</p>
                                         <p>Current Capacity: {(event.rsvp === undefined || event.rsvp.Yes === undefined) ? 0 + "/" + event.max_capacity : event.rsvp.Yes.length + "/" + event.max_capacity}</p>
