@@ -30,6 +30,13 @@ class Database {
         return result;
     }
 
+    async searchEvent(searchCriteria) {
+        const result = await this.client.db("campus_discovery").collection("events").find().project({time:true, host:true}).toArray();
+
+        console.log(`Events found from filtering: ${searchCriteria}`);
+        return result;
+    }
+
     async createUser(newUser) {
         const result = await this.client.db("campus_discovery").collection("users").insertOne(newUser);
 

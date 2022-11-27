@@ -5,6 +5,7 @@ import './Events.css';
 import AddIcon from '@mui/icons-material/Add';
 import Modal from "../components/Modal";
 import AddEvent from "../components/AddEvent";
+import FilterEvent from "../components/FilterEvent";
 import DeleteIcon from '@mui/icons-material/Delete';
 import Pagination from "../components/Pagination"
 import EditIcon from '@mui/icons-material/Edit';
@@ -85,6 +86,21 @@ function Events() {
                 rsvp: rsvp,
                 inviteOnly: inviteOnly,
                 inviteList: []
+            })
+        }).then(console.log).catch(console.error)
+        console.log(add)
+        setChanged(changed + 1)
+    }
+
+    const handleFilterEvent = async () => {
+        setShowModal(false)
+        const add = await fetch("http://localhost:3001/searchEvent", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                dateTime: dateTime,
+                eventName: eventName,
+                hostName: hostName
             })
         }).then(console.log).catch(console.error)
         console.log(add)
@@ -335,6 +351,11 @@ function Events() {
                             desc={desc} setDesc={setDesc} max_capacity={max_capacity} setMaxCapacity={setMaxCapacity} rsvp={rsvp}
                             setRSVP = {setRSVP} inviteOnly={inviteOnly} setInviteOnly={setInviteOnly} endDateTime={endDateTime}
                             setEndDateTime={setEndDateTime}/>
+                    </Modal>
+                    {/*<div className="delete-button" onClick={() => setShowModal(true)}>Delete</div>*/}
+                    <div className="filter-button" onClick={() => setShowModal(true)}> <AddIcon/> Filter Event </div>
+                    <Modal title="Filter" show={showModal} setShow={setShowModal}>
+                        <FilterEvent  dateTime={dateTime} setDateTime={setDateTime} eventName={eventName} setEventName={setEventName} hostName={hostName} setHostName={setHostName}/>
                     </Modal>
                     {/*<div className="delete-button" onClick={() => setShowModal(true)}>Delete</div>*/}
                 </div>
