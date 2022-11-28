@@ -3,7 +3,7 @@ import './FilterEvent.css'
 import CheckIcon from '@mui/icons-material/Check';
 
 function FilterEvent ({filterEvent, eventName, setEventName, location, setLocation, dateTime, setDateTime, desc, setDesc, maximum_capacity, setMaxCapacity,
-    inviteOnly, setInviteOnly, endDateTime, setEndDateTime}) {
+    inviteOnly, setInviteOnly, endDateTime, setEndDateTime, hostName, setHostName}) {
     useEffect(() => {
         setDateTime("");
         setEventName("");

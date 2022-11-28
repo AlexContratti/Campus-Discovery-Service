@@ -13,6 +13,7 @@ import Edit from '@mui/icons-material/Edit';
 
 function Events() {
     const [showModal, setShowModal] = useState(false);
+    const [showFilterModal, setShowFilterModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showRSVPModal, setShowRSVPModal] = useState(false);
     const [data, setData] = useState([]);
@@ -94,7 +95,7 @@ function Events() {
     }
 
     const handleFilterEvent = async () => {
-        setShowModal(false)
+        setShowFilterModal(false)
         const add = await fetch("http://localhost:3001/searchEvent", {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
@@ -354,8 +355,8 @@ function Events() {
                             setEndDateTime={setEndDateTime}/>
                     </Modal>
                     {/*<div className="delete-button" onClick={() => setShowModal(true)}>Delete</div>*/}
-                    <div className="filter-button" onClick={() => setShowModal(true)}> <AddIcon/> Filter Event </div>
-                    <Modal title="Filter" show={showModal} setShow={setShowModal}>
+                    <div className="filter-button" onClick={() => setShowFilterModal(true)}> <AddIcon/> Filter Event </div>
+                    <Modal title="Filter" show={showFilterModal} setShow={setShowFilterModal}>
                         <FilterEvent filterEvent={handleFilterEvent} dateTime={dateTime} setDateTime={setDateTime} eventName={eventName} setEventName={setEventName} hostName={hostName} setHostName={setHostName}/>
                     </Modal>
                     {/*<div className="delete-button" onClick={() => setShowModal(true)}>Delete</div>*/}
