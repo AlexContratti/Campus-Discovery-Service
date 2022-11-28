@@ -22,6 +22,7 @@ function Events() {
     const [eventName, setEventName] = useState("")
     const [location, setLocation] = useState("")
     const [dateTime, setDateTime] = useState("")
+    const [hostName, setHostName] = useState("")
     const [endDateTime, setEndDateTime] = useState("")
     const [desc, setDesc] = useState("")
     const [max_capacity, setMaxCapacity] = useState("")
@@ -355,7 +356,7 @@ function Events() {
                     {/*<div className="delete-button" onClick={() => setShowModal(true)}>Delete</div>*/}
                     <div className="filter-button" onClick={() => setShowModal(true)}> <AddIcon/> Filter Event </div>
                     <Modal title="Filter" show={showModal} setShow={setShowModal}>
-                        <FilterEvent  dateTime={dateTime} setDateTime={setDateTime} eventName={eventName} setEventName={setEventName} hostName={hostName} setHostName={setHostName}/>
+                        <FilterEvent filterEvent={handleFilterEvent} dateTime={dateTime} setDateTime={setDateTime} eventName={eventName} setEventName={setEventName} hostName={hostName} setHostName={setHostName}/>
                     </Modal>
                     {/*<div className="delete-button" onClick={() => setShowModal(true)}>Delete</div>*/}
                 </div>
