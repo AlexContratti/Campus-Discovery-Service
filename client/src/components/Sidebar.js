@@ -47,7 +47,7 @@ export default function Sidebar () {
           <li className="menu-item" onClick={handleAllEvents}><EventIcon className="icon"/> All Events</li>
           <li className="menu-item" onClick={handleRegistered}><EventAvailableIcon className="icon"/> Registered </li>
           <li className="menu-item"><PersonOutlineIcon className="icon"/> Account </li>
-          <li className="menu-item" onclick={handleMap}><MapIcon className="icon"/> Map </li>
+          <li className="menu-item" onClick={handleMap}><MapIcon className="icon"/> Map </li>
           <li className="menu-item" onClick={handleExitClick}><LogoutIcon className="icon"/> Exit </li>
         </ul>
       </div>

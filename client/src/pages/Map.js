@@ -1,16 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import './Map.css'
-import mapboxgl from '!mapbox-gl'
+import mapboxgl from 'mapbox-gl'
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWxleGNvbnRyYXR0aSIsImEiOiJjbGF6cnNlMW8wbTNyM3FuNTE4dzVjbHpqIn0.Oh351ybpdpLDcSE17rDcCQ';
 
 
 function Map() {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [lng, setLng] = useState(33.7756);
-    const [lat, setLat] = useState(-84.3963);
-    const [zoom, setZoom] = useState(9);
+    const [lng, setLng] = useState(-84.390165106);
+    const [lat, setLat] = useState(33.772163578);
+    const [zoom, setZoom] = useState(13);
 
     useEffect(() => {
         if (map.current) return; // initialize map only once
@@ -32,8 +32,9 @@ function Map() {
     });
 
     return (
-        <div>
+        <div className="events-container">
             <div className="nav-bar"><Sidebar /></div>
+            <div ref={mapContainer} className="map-container"  />
         </div>
     );
 }
