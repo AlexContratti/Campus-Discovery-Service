@@ -4,6 +4,7 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import EventIcon from '@mui/icons-material/Event';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MapIcon from '@mui/icons-material/Map';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,6 +33,10 @@ export default function Sidebar () {
   const handleRegistered = (e) => {
     navigate('/Registered')
   }
+
+  const handleMap = (e) => {
+    navigate('/Map')
+  }
   
 
   return (
@@ -42,6 +47,7 @@ export default function Sidebar () {
           <li className="menu-item" onClick={handleAllEvents}><EventIcon className="icon"/> All Events</li>
           <li className="menu-item" onClick={handleRegistered}><EventAvailableIcon className="icon"/> Registered </li>
           <li className="menu-item"><PersonOutlineIcon className="icon"/> Account </li>
+          <li className="menu-item" onclick={handleMap}><MapIcon className="icon"/> Map </li>
           <li className="menu-item" onClick={handleExitClick}><LogoutIcon className="icon"/> Exit </li>
         </ul>
       </div>
