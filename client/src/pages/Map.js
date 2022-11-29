@@ -52,7 +52,7 @@ function Map() {
                     new mapboxgl.Marker(el)
                         .setLngLat(marker.geometry.coordinates)
                         .setPopup(
-                            new mapboxgl.Popup({ offset: 25 }) // add popups
+                            new mapboxgl.Popup({ offset: 25, anchor: 'right' }) // add popups
                                 .setHTML('<p>' + marker.properties.description + '</p>')
                         )
                         .addTo(map.current);
@@ -87,6 +87,10 @@ function Map() {
                 const coordinates = match.features[0].geometry.coordinates;
                 const center = match.features[0].center;
 
+                let description = data.name + '<br>Host: ' + data.host + '<br>Location: ' + data.location + '<br>Date & Time: ' + data.time + '<br>Description: ' + data.description.substring(0, 100) + '<br>Capacity: '
+                description += (data.rsvp === undefined || data.rsvp.Yes === undefined) ? 0 + "/" + data.max_capacity : data.rsvp.Yes.length + "/" + data.max_capacity
+                
+            
                 return {
                     type: 'Feature',
                     center: center,
@@ -95,19 +99,15 @@ function Map() {
                         coordinates: coordinates,
                     },
                     properties: {
-                        description: data.eventName + '\n' + data.location,
+                        description: description,
                     },
                 };
         });
     };
 
-    
-
-
-
     return (
         <div className="events-container">
-            <div className="nav-bar"><Sidebar /></div>
+            <div className="nav-bar"><Sidebar/></div>
             <div className="pageheader"> Map </div>
             <div ref={mapContainer} className="map-container"  />
             <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet"></link>
