@@ -63,10 +63,17 @@ function Events() {
         }, 1000)
     }, [])
     useEffect( () => {
-        fetch("http://localhost:3001/events")
-            .then(res => res.json())
-            .then(data => setData(data));
+        if (localStorage.getItem("data") !== null) {
+            setData(JSON.parse(localStorage.getItem("data")))
+        } else {
+            fetch("http://localhost:3001/events")
+                .then(res => res.json())
+                .then(data => setData(data));
+        }
     }, [changed]);
+    useEffect(() => {
+        localStorage.setItem("data", JSON.stringify(data))
+    }, [data])
 
     const paginate = (pageNumber) => {
         setCurrPage(pageNumber)
@@ -113,9 +120,11 @@ function Events() {
                 hostName: hostName
             })
         })
-        .then(res=>res.json())
-        .then(filterData=>setData(filterData))
+            .then(res=>res.json())
+            .then(filterData=>setData(filterData))
+        localStorage.setItem("data", JSON.stringify(data))
         if (dateTime === "" && eventName === "" && hostName === "") {
+            localStorage.removeItem("data")
             setChanged(changed + 1)
         }
     }

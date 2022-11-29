@@ -17,6 +17,7 @@ export default function Sidebar () {
     localStorage.removeItem("username")
     localStorage.removeItem("name")
     localStorage.removeItem("type")
+    localStorage.removeItem("data")
   }
 
   useEffect(() => {

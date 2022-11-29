@@ -10,9 +10,7 @@ function Map() {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/events")
-            .then(res => res.json())
-            .then(data => setData(data))
+        setData(JSON.parse(localStorage.getItem("data")))
     }, []);
 
     const mapContainer = useRef(null);
