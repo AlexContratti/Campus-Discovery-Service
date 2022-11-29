@@ -17,6 +17,7 @@ function Events() {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showRSVPModal, setShowRSVPModal] = useState(false);
     const [data, setData] = useState([]);
+    const [filterData, setFilterData] = useState([]);
     const [changed, setChanged] = useState(0)   
     const eventtiles = useRef(null)
 
@@ -42,6 +43,13 @@ function Events() {
     const indexOfLastPost = Math.min(currPage * postsPerPage, data.length);
     const indexOfFirstPost = Math.max(indexOfLastPost - postsPerPage, (currPage - 1) * postsPerPage);
     const currEvents = data.slice(indexOfFirstPost, indexOfLastPost);
+
+    const [currPageFilter, setCurrPageFilter] = useState(1);
+    const [postsPerPageFilter] = useState(10);
+
+    const indexOfLastPostFilter = Math.min(currPageFilter * postsPerPageFilter, filterData.length);
+    const indexOfFirstPostFilter = Math.max(indexOfLastPostFilter - postsPerPageFilter, (currPageFilter - 1) * postsPerPageFilter);
+    const currEventsFilter = filterData.slice(indexOfFirstPostFilter, indexOfLastPostFilter);
 
     const navigate = useNavigate()
 
@@ -104,9 +112,12 @@ function Events() {
                 eventName: eventName,
                 hostName: hostName
             })
-        }).then(console.log).catch(console.error)
-        console.log(add)
-        setChanged(changed + 1)
+        })
+        .then(res=>res.json())
+        .then(filterData=>setData(filterData))
+        if (dateTime === "" && eventName === "" && hostName === "") {
+            setChanged(changed + 1)
+        }
     }
 
     const handleEventDelete = async (e) => {
@@ -400,7 +411,7 @@ function Events() {
                                     <p>Description: {event.description}</p> 
                                 </div>
                             </Modal>  */}
-                            <div id={event.name+"-rsvp"} class="modal">
+                            <div id={event.name+"-rsvp"} className="modal">
                                 <div className="modal-content">
                                     <span className="close" id={event.name+"-rsvp"} onClick={close}>
                                         &times;
@@ -413,7 +424,7 @@ function Events() {
                                 </div>
                             </div>
 
-                            <div id={event.name+"-admin"} class="modal">
+                            <div id={event.name+"-admin"} className="modal">
                                 <div className="modal-content">
                                     <span className="close" id={event.name+"-admin"} onClick={close}>
                                         &times;
@@ -444,7 +455,7 @@ function Events() {
                                 </div>
                             </div>
 
-                            <div id={event.name+"-modal"} class="modal">
+                            <div id={event.name+"-modal"} className="modal">
                                 <div className="modal-content">
                                     <span className="close" id={event.name+"-modal"} onClick={close}>
                                         &times;

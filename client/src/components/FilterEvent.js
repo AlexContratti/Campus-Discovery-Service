@@ -14,7 +14,7 @@ function FilterEvent ({filterEvent, eventName, setEventName, location, setLocati
       <div className="filter-event-container">
         <div className='input-container'>
         <div className='input'>
-                <div className='title'>Date/Time:</div>
+                <div className='title'>Date/Time (month/day/year/time):</div>
                 <input type='text' id="dateTime" className='input-text' onChange={e => setDateTime(e.target.value)}></input>
             </div>
             <div className='input'>

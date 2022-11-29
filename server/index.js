@@ -98,29 +98,20 @@ app.post("/searchEvent", jsonBodyParser, async (req, res) => {
   try {
     console.log("/searchEvent POST Request received");
     console.log(req.body);
-    //var {eventName, description, host, location, dateTime} = req.body;
-   /*
-    if (!eventName || !host || !location || !description || !dateTime || dateTime.length < 16) {
-      res.status(400).send("Invalid inputs");
-      return;
-    }
-  */
-    //console.log(eventName + " " + host + " " + location + " " + dateTime + " " + description)
-    let validated = await db.searchEvent({
-      time: req.body.dateTime,
-      host: req.body.host
-    });
-
-    if (validated) {
-      res.status(201);
-    } else {
+    var time = req.body.dateTime;
+    var name = req.body.eventName;
+    var host = req.body.hostName;
+    console.log("yo")
+    console.log(time);
+    console.log(name);
+    console.log(host);
+    var filteredEvents = await db.searchEvent(time, name, host);
+    console.log(filteredEvents)
+    res.status(200).send(filteredEvents);
+    } catch (err) {
+      console.log(err);
       res.status(400);
     }
-    res.send();
-  } catch (err) {
-    console.log(err);
-    res.status(400);
-  }
 })
 
 app.get("/events", async(req, res) => {

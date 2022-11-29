@@ -30,10 +30,14 @@ class Database {
         return result;
     }
 
-    async searchEvent(searchCriteria) {
-        const result = await this.client.db("campus_discovery").collection("events").find().project({time:true, host:true}).toArray();
+    async searchEvent(time, name, host) {
+        const result = await this.client.db("campus_discovery").collection("events").find({$and:[
+            {time: {$ne: ''}, name: {$ne: ''}, host:{$ne: ''}},
+            {time: {$regex: time}, name: {$regex: name}, host: {$regex: host}}
+            ]}).project({name:true, description:true,
+            host:true, location:true, time:true, endTime:true, max_capacity:true, rsvp: true, inviteOnly: true, inviteList: true}).toArray();
 
-        console.log(`Events found from filtering: ${searchCriteria}`);
+        console.log(`Events found from filtering: ${time, name, host}`);
         return result;
     }
 
