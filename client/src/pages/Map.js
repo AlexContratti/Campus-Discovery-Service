@@ -29,19 +29,47 @@ function Map() {
             center: [lng, lat],
             zoom: zoom
         });
-    });
-
-    useEffect(() => {
-        if (!map.current) return; // wait for map to initialize
         map.current.on('move', () => {
             setLng(map.current.getCenter().lng.toFixed(4));
             setLat(map.current.getCenter().lat.toFixed(4));
             setZoom(map.current.getZoom().toFixed(2));
         });
-    });
+    }, []);
 
-    const fetchData = useCallback((data) => {
-        
+    useEffect(() => {
+        if (!map.current) return; // Waits for the map to initialise
+
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+                const results = fetchData(data[i]);
+
+                results.then((marker) => {
+                    // create a HTML element for each feature
+                    var el = document.createElement('div');
+                    el.className = 'marker';
+    
+                    // make a marker for each feature and add it to the map
+                    new mapboxgl.Marker(el)
+                        .setLngLat(marker.geometry.coordinates)
+                        .setPopup(
+                            new mapboxgl.Popup({ offset: 25 }) // add popups
+                                .setHTML('<p>' + marker.properties.description + '</p>')
+                        )
+                        .addTo(map.current);
+    
+                    map.current.on('load', async () => {
+                        map.current.flyTo({
+                            center: marker.center,
+                        });
+                    });
+                }); 
+            }
+            
+    }, [data]);
+
+    const fetchData = async (data) => {
+        console.log("fetch data")
+        console.log(data)
         const geocodingClient = mbxGeocoding({
             accessToken: mapboxgl.accessToken,
         });
@@ -70,37 +98,10 @@ function Map() {
                         description: data.eventName + '\n' + data.location,
                     },
                 };
-            });
-    }, []);
+        });
+    };
 
-    useEffect(() => {
-        if (!map.current) return; // Waits for the map to initialise
-
-            console.log(data);
-            
-            const results = fetchData(data[1]);
-
-            results.then((marker) => {
-                // create a HTML element for each feature
-                var el = document.createElement('div');
-                el.className = 'marker';
-
-                // make a marker for each feature and add it to the map
-                new mapboxgl.Marker(el)
-                    .setLngLat(marker.geometry.coordinates)
-                    .setPopup(
-                        new mapboxgl.Popup({ offset: 25 }) // add popups
-                            .setHTML('<p>' + marker.properties.description + '</p>')
-                    )
-                    .addTo(map.current);
-
-                map.current.on('load', async () => {
-                    map.current.flyTo({
-                        center: marker.center,
-                    });
-                });
-            }); 
-    }, [fetchData]);
+    
 
 
 
